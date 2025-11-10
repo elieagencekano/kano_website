@@ -1,0 +1,127 @@
+---
+const title = "KANO, votre partenaire digital.";
+const subline = "pas juste un prestataire.";
+const tagline = "Nous créons des sites qui attirent, convainquent et transforment — pour des entreprises qui veulent plus de visibilité et plus de clients.";
+
+const benefits = [
+  {
+    icon: `<path d="M3 12l4 4L21 6"/>`,
+    title: "Un site pensé pour votre marché.",
+    description: "Votre site devient un vrai commercial : clair, attractif et conçu pour générer des demandes concrètes."
+  },
+  {
+    icon: `<circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/>`,
+    title: "Moins de perte de temps",
+    description: "On s’occupe de tout. Vous gardez la main sur les décisions, sans subir la technique."
+  },
+  {
+    icon: `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 14l3-3 2 2 4-5"/>`,
+    title: "Une visibilité durable",
+    description: "Vos futurs clients vous trouvent naturellement sur Google et les réseaux, sans dépenser plus."
+  }
+];
+
+const proofs = ["Sites optimisés pour convertir", "100% de satisfaction", "Accompagnement humain et réactif"];
+---
+<section class="hero" aria-label="Intro">
+  <div class="veil"></div>
+  <div class="fx" aria-hidden="true">
+    <div class="orb b1"></div>
+    <div class="orb b2"></div>
+  </div>
+
+  <div class="grid">
+    <div class="left">
+      <div class="card glass">
+        <h1 class="hero-title">
+          <span class="brand">{title.split(",")[0]},</span><br />
+          <span class="main">{title.split(",")[1]?.trim()}</span>
+          <span class="subline">{subline}</span>
+        </h1>
+
+        <p class="lead">{tagline}</p>
+        <ul class="proofs">
+          {proofs.map(p => <li>{p}</li>)}
+        </ul>
+        <div class="cta">
+          <a href="#contact" class="btn primary">
+            <span>Planifier un échange</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#solutions" class="btn ghost">Voir nos solutions</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="stack">
+        <h2>Créer. Attirer. Convertir.</h2>
+        <div class="benefits">
+          {benefits.map((b, i) => (
+            <div class="benefit glass" style={`animation-delay:${0.15 + i*0.12}s`}>
+              <div class="icn">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <Fragment set:html={b.icon} />
+                </svg>
+              </div>
+              <div class="txt">
+                <h3>{b.title}</h3>
+                <p>{b.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="mini">
+          <a href="#web" class="chip">Sites vitrines & e-commerce</a>
+          <a href="#seo" class="chip">Audits & contenus SEO</a>
+          <a href="#sea" class="chip">Google Ads & retargeting</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.hero{position:relative;min-height:100svh;width:100%;display:flex;align-items:center;overflow:hidden;padding:120px 0 80px;background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(32,65,106,.12),transparent)}
+.veil{position:absolute;inset:0;background:radial-gradient(60% 60% at 18% 22%,rgba(32,65,106,.28),transparent 60%),radial-gradient(50% 50% at 82% 8%,rgba(212,175,55,.10),transparent 60%),linear-gradient(180deg,rgba(16,24,32,0) 0%,rgba(16,24,32,.35) 100%);pointer-events:none}
+.fx{position:absolute;inset:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.28;animation:float 24s ease-in-out infinite}
+.b1{width:520px;height:520px;top:8%;left:6%;background:radial-gradient(circle,rgba(32,65,106,.55),transparent)}
+.b2{width:380px;height:380px;bottom:10%;right:6%;background:radial-gradient(circle,rgba(212,175,55,.35),transparent);animation-delay:-10s}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.12)}66%{transform:translate(-30px,24px) scale(.9)}}
+.grid{max-width:1380px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;position:relative;z-index:1}
+.left{animation:fadeL 700ms ease-out}
+@keyframes fadeL{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:translateX(0)}}
+.right{animation:fadeR 700ms ease-out 120ms backwards}
+@keyframes fadeR{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
+.card{padding:48px;text-align:left}
+.hero-title{margin:0 0 12px;line-height:1.1}
+.hero-title .brand{display:inline-block;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(2.2rem,4.4vw,3.6rem);background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.95) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-title .main{display:inline-block;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(2.2rem,4.4vw,3.6rem);background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.92) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-title .subline{display:block;margin-top:6px;font-family:Montserrat,sans-serif;font-weight:700;font-size:clamp(1.05rem,1.6vw,1.25rem);color:rgba(255,255,255,.85);animation:hideSub 600ms ease-out 2s forwards}
+@keyframes hideSub{to{opacity:0;filter:blur(4px);transform:translateY(-6px)}}
+.lead{color:var(--kano-light);opacity:.9;font-size:clamp(1.05rem,1.2vw,1.25rem);line-height:1.6;margin:0 0 18px}
+.proofs{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;padding:0;list-style:none}
+.proofs li{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);font-weight:600;font-size:.9rem;color:#fff}
+.cta{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:999px;font-weight:700;font-size:1rem;text-decoration:none;border:1px solid transparent;transition:all .28s cubic-bezier(.4,0,.2,1)}
+.btn.primary{background:var(--kano-gold);color:#101820;box-shadow:0 8px 26px rgba(212,175,55,.25)}
+.btn.primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(212,175,55,.4)}
+.btn.ghost{color:#fff;border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.05);backdrop-filter:blur(10px)}
+.btn.ghost:hover{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.12);transform:translateY(-2px)}
+.stack{display:flex;flex-direction:column;gap:18px}
+.stack h2{font-size:clamp(1.6rem,2.5vw,2.2rem);line-height:1.3;color:#fff;margin:0}
+.benefits{display:grid;grid-template-columns:1fr;gap:14px;margin-top:4px}
+.benefit{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(135deg,rgba(255,255,255,.03),rgba(255,255,255,.01));transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s,background .35s;animation:up 620ms ease-out backwards}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.benefit:hover{transform:translateX(6px);background:linear-gradient(135deg,rgba(212,175,55,.08),rgba(255,255,255,.02));box-shadow:0 10px 26px rgba(0,0,0,.18);border-color:rgba(212,175,55,.25)}
+.icn{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(212,175,55,.16),rgba(212,175,55,.06));border:1px solid rgba(212,175,55,.32);display:flex;align-items:center;justify-content:center;color:var(--kano-gold)}
+.txt h3{font-size:1.08rem;font-weight:800;color:#fff;letter-spacing:.2px;margin:0 0 6px}
+.txt p{color:var(--kano-light);opacity:.88;font-size:.95rem;line-height:1.55;margin:0}
+.mini{display:flex;flex-wrap:wrap;gap:10px;margin-top:2px}
+.chip{display:inline-block;padding:8px 12px;border-radius:999px;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);font-weight:600;font-size:.9rem;transition:background .25s,border-color .25s,transform .25s}
+.chip:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.32);transform:translateY(-2px)}
+@media (max-width:1200px){.grid{grid-template-columns:1fr;gap:46px;padding:0 24px}.hero{padding:100px 0 60px}.card{padding:38px}}
+@media (max-width:640px){.hero{padding:84px 0 42px}.grid{padding:0 18px;gap:32px}.card{padding:26px 22px}.hero-title .brand,.hero-title .main{font-size:2rem}.hero-title .subline{font-size:1rem}.btn{padding:12px 20px;font-size:.95rem}.benefit{padding:16px 16px}.icn{width:40px;height:40px}}
+</style>

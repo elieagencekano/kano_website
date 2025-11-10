@@ -1,0 +1,11 @@
+:root{
+  --kano-blue:#20416A;
+  --kano-gold:#D4AF37;
+  --kano-ink:#101820;
+  --kano-light:#F4F4F4;
+
+  --radius-xl:24px;
+  --glass-bg:rgba(255,255,255,.06);
+  --glass-brd:rgba(255,255,255,.2);
+  --shadow-lg:0 10px 30px rgba(0,0,0,.25);
+}

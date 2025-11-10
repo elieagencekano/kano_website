@@ -1,0 +1,172 @@
+---
+const navLinks = [
+  { name: "Accueil", href: "/" },
+  { name: "Solutions", href: "#solutions" },
+  { name: "À propos", href: "#apropos" },
+  { name: "Contact", href: "#contact" },
+];
+---
+<div id="kano-nav">
+  <nav class="header-pill" aria-label="Navigation">
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <a href="/" class="logo" aria-label="KANO">KANO</a>
+
+    <div class="desktop-wrap">
+      <div class="desktop-nav" role="menu">
+        {navLinks.map(l => <a class="nav-link" role="menuitem" href={l.href}>{l.name}</a>)}
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-dropdown" role="menu">
+    {navLinks.map(l => <a class="dropdown-link" role="menuitem" href={l.href}>{l.name}</a>)}
+  </div>
+</div>
+
+<style>
+#kano-nav{
+  position:fixed; top:18px; left:50%; transform:translateX(-50%);
+  z-index:9999; width:calc(100vw - 20px); display:flex; justify-content:center;
+  font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:#fff;
+}
+
+.header-pill{
+  display:flex; align-items:center; position:relative;
+  padding:12px 22px; height:44px; border-radius:999px; gap:0;
+  background:var(--glass-bg); border:1px solid var(--glass-brd);
+  backdrop-filter:blur(20px) saturate(160%); -webkit-backdrop-filter:blur(20px) saturate(160%);
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+  justify-content:center;
+  transition: padding .55s cubic-bezier(.22,.61,.36,1), justify-content .55s cubic-bezier(.22,.61,.36,1);
+}
+.header-pill.expanded{ justify-content:flex-start; padding-left:22px; }
+
+.logo{
+  font-family:"Montserrat","Poppins",sans-serif; font-weight:800; letter-spacing:.5px;
+  color:var(--kano-gold); text-decoration:none; font-size:1.1rem;
+  transition: margin .55s cubic-bezier(.22,.61,.36,1);
+}
+.header-pill.expanded .logo{ margin-right:18px; }
+
+.desktop-wrap{
+  width:0; overflow:hidden; margin-left:0;
+  transition: width .55s cubic-bezier(.22,.61,.36,1), margin-left .55s cubic-bezier(.22,.61,.36,1);
+}
+.header-pill.expanded .desktop-wrap{
+  width:var(--nav-w);
+  margin-left:6px;
+}
+
+.desktop-nav{ display:flex; gap:8px; }
+.nav-link{
+  padding:8px 14px; border-radius:999px; white-space:nowrap;
+  color:#fff; text-decoration:none; font-weight:600; font-size:.95rem;
+  border:1px solid transparent; transition: border-color .2s, color .2s, background .2s;
+}
+.nav-link:hover{ color:var(--kano-gold); border-color:rgba(212,175,55,.35); background:rgba(212,175,55,.06); }
+
+.menu-toggle{
+  display:none; background:transparent; border:none; width:28px; height:28px;
+  color:#fff; cursor:pointer; border-radius:8px; padding:0; flex-shrink:0;
+  margin-right:8px; order:-1;
+}
+.menu-toggle.active{ color:var(--kano-gold); }
+
+.mobile-dropdown{
+  position:fixed; top:70px; left:50%; transform:translateX(-50%);
+  width:min(640px, calc(100vw - 20px));
+  background:rgba(16,24,32,.9); border:1px solid rgba(255,255,255,.15);
+  border-radius:20px; padding:8px; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  display:flex; flex-direction:column; gap:6px; opacity:0; visibility:hidden; transform:translate(-50%,-6px);
+  transition: opacity .25s, transform .25s, visibility .25s;
+}
+.mobile-dropdown.show{ opacity:1; visibility:visible; transform:translate(-50%,0); }
+.dropdown-link{ padding:12px 14px; border-radius:12px; text-align:center; color:#fff; text-decoration:none; font-weight:600; }
+.dropdown-link:hover{ background:rgba(255,255,255,.06); color:var(--kano-gold); }
+
+@media (min-width:900px){ .desktop-wrap{ display:block; } }
+@media (max-width:899px){
+  .menu-toggle{ display:flex; align-items:center; justify-content:center; }
+  .desktop-wrap{ display:none; }
+}
+@media (max-width:420px){
+  #kano-nav{ top:12px; }
+  .header-pill{ height:40px; padding:10px 12px; }
+  .logo{ font-size:1rem; }
+  .menu-toggle{ width:24px; height:24px; margin-right:6px; }
+  .menu-toggle svg{ width:18px; height:18px; }
+}
+</style>
+
+<script>
+const root   = document.getElementById('kano-nav');
+const pill   = root.querySelector('.header-pill');
+const wrap   = root.querySelector('.desktop-wrap');
+const nav    = root.querySelector('.desktop-nav');
+const toggle = root.querySelector('.menu-toggle');
+const drop   = root.querySelector('.mobile-dropdown');
+const mql    = window.matchMedia('(min-width:900px)');
+let demoDone = false;
+
+function computeDesktopWidth(){
+  if(!nav) return;
+  const wanted = Math.ceil(nav.scrollWidth) + 4;
+  pill.style.setProperty('--nav-w', wanted + 'px');
+}
+
+function bindDesktopHover(){
+  function onEnter(){ pill.classList.add('expanded'); computeDesktopWidth(); }
+  function onLeave(){ pill.classList.remove('expanded'); }
+  pill.addEventListener('mouseenter', onEnter);
+  pill.addEventListener('mouseleave', onLeave);
+  window.addEventListener('resize', computeDesktopWidth);
+}
+
+function playDemoOnce(){
+  if(demoDone) return; demoDone = true;
+  pill.classList.add('expanded'); computeDesktopWidth();
+  setTimeout(()=> pill.classList.remove('expanded'), 1100);
+}
+
+function setState(){
+  if(mql.matches){
+    pill.classList.remove('expanded');
+    drop.classList.remove('show');
+    toggle?.classList.remove('active');
+    toggle?.setAttribute('aria-expanded','false');
+    computeDesktopWidth();
+    bindDesktopHover();
+    requestAnimationFrame(()=> setTimeout(playDemoOnce, 300));
+  }else{
+    pill.classList.remove('expanded');
+    drop.classList.remove('show');
+    toggle?.classList.remove('active');
+    toggle?.setAttribute('aria-expanded','false');
+  }
+}
+
+toggle?.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  const open = !drop.classList.contains('show');
+  drop.classList.toggle('show', open);
+  toggle.classList.toggle('active', open);
+  toggle.setAttribute('aria-expanded', String(open));
+});
+
+document.addEventListener('click', (e)=>{
+  if(!drop.contains(e.target) && !pill.contains(e.target)){
+    drop.classList.remove('show');
+    toggle?.classList.remove('active');
+    toggle?.setAttribute('aria-expanded','false');
+  }
+});
+
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', setState); }
+else{ setState(); }
+</script>
