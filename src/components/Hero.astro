@@ -36,7 +36,7 @@ const proofs = ["Sites optimisés pour convertir", "100% de satisfaction", "Acco
         <h1 class="hero-title">
           <span class="brand">{title.split(",")[0]},</span><br />
           <span class="main">{title.split(",")[1]?.trim()}</span>
-          <span class="subline">{subline}</span>
+          <span class="subline">pas juste un <span class="strike-word">prestataire</span></span>
         </h1>
 
         <p class="lead">{tagline}</p>
@@ -99,8 +99,10 @@ const proofs = ["Sites optimisés pour convertir", "100% de satisfaction", "Acco
 .hero-title{margin:0 0 12px;line-height:1.1}
 .hero-title .brand{display:inline-block;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(2.2rem,4.4vw,3.6rem);background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.95) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero-title .main{display:inline-block;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(2.2rem,4.4vw,3.6rem);background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.92) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-title .subline{display:block;margin-top:6px;font-family:Montserrat,sans-serif;font-weight:700;font-size:clamp(1.05rem,1.6vw,1.25rem);color:rgba(255,255,255,.85);animation:hideSub 600ms ease-out 2s forwards}
-@keyframes hideSub{to{opacity:0;filter:blur(4px);transform:translateY(-6px)}}
+.hero-title .subline{display:block;margin-top:10px;font-family:Montserrat,sans-serif;font-weight:500;font-size:clamp(1.4rem,2vw,1.8rem);color:rgba(255,255,255,.9)}
+.strike-word{position:relative;display:inline-block}
+.strike-word::after{content:"";position:absolute;left:0;top:50%;width:0%;height:2px;background:rgba(255,255,255,.85);transform:translateY(-50%);animation:strikeAnim .6s ease-out 2s forwards}
+@keyframes strikeAnim{to{width:100%}}
 .lead{color:var(--kano-light);opacity:.9;font-size:clamp(1.05rem,1.2vw,1.25rem);line-height:1.6;margin:0 0 18px}
 .proofs{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;padding:0;list-style:none}
 .proofs li{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);font-weight:600;font-size:.9rem;color:#fff}
@@ -123,5 +125,5 @@ const proofs = ["Sites optimisés pour convertir", "100% de satisfaction", "Acco
 .chip{display:inline-block;padding:8px 12px;border-radius:999px;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);font-weight:600;font-size:.9rem;transition:background .25s,border-color .25s,transform .25s}
 .chip:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.32);transform:translateY(-2px)}
 @media (max-width:1200px){.grid{grid-template-columns:1fr;gap:46px;padding:0 24px}.hero{padding:100px 0 60px}.card{padding:38px}}
-@media (max-width:640px){.hero{padding:84px 0 42px}.grid{padding:0 18px;gap:32px}.card{padding:26px 22px}.hero-title .brand,.hero-title .main{font-size:2rem}.hero-title .subline{font-size:1rem}.btn{padding:12px 20px;font-size:.95rem}.benefit{padding:16px 16px}.icn{width:40px;height:40px}}
+@media (max-width:640px){.hero{padding:84px 0 42px}.grid{padding:0 18px;gap:32px}.card{padding:26px 22px}.hero-title .brand,.hero-title .main{font-size:2rem}.hero-title .subline{font-size:1.2rem}.btn{padding:12px 20px;font-size:.95rem}.benefit{padding:16px 16px}.icn{width:40px;height:40px}}
 </style>
