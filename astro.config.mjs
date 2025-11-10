@@ -1,5 +1,7 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  site: "https://elieagencekano.github.io/kano_website/",
+  base: "/kano_website/",
+  outDir: "./dist",
+});
