@@ -1,132 +1,50 @@
-<script>
-  const c0=document.getElementById('layer0'), g0=c0.getContext('2d',{alpha:true});
-  const c1=document.getElementById('layer1'), g1=c1.getContext('2d',{alpha:true});
-  let W=0,H=0,PR=1,t0=0,run=true,last=0;
-  const FPS = (innerWidth<768) ? 24 : 30; // limite d’images/s
-  
-  function resize(){
-    // ↓ baisse la résolution de rendu interne (gros gain perfs)
-    PR = Math.min(devicePixelRatio||1, 1.5);
-    W = c0.width = c1.width = Math.floor(innerWidth*PR);
-    H = c0.height = c1.height = Math.floor(innerHeight*PR);
-  }
-  resize(); addEventListener('resize',resize);
-  
-  const mix=(a,b,t)=>a+(b-a)*t;
-  const osc=(t,k=1,ph=0)=>(Math.sin(t*k+ph)+1)/2;
-  const wiggle=(t,mag=1)=>Math.sin(t*1.7)*.6+Math.sin(t*2.3+1.2)*.4+Math.cos(t*1.1+0.7)*.3*mag;
-  
-  // ↓ moins d’objets + rayons plus petits = moins de fill lourds
-  const BLOBS=[
-    {col:[32,65,106], alpha:0.26, r:460, sp:.16, off:0.0, amp:.18},
-    {col:[32,65,106], alpha:0.20, r:620, sp:.12, off:1.1, amp:.20},
-    {col:[212,175,55],alpha:0.10, r:520, sp:.15, off:2.0, amp:.18},
-  ];
-  
-  function drawMasses(t){
-    g0.clearRect(0,0,W,H);
-    g0.save();
-    g0.globalCompositeOperation='screen';
-    // ↓ blur divisé par ~2
-    g0.filter='blur(32px)';
-    for(const b of BLOBS){
-      const tt=t*b.sp+b.off;
-      const jx=wiggle(tt*.9,b.amp), jy=wiggle(tt*1.1,b.amp);
-      const x=mix(W*0.10,W*0.90, osc(tt,0.7,0.3)) + jx*40;
-      const y=mix(H*0.06,H*0.92, osc(tt,1.2,1.1)) + jy*34;
-      const R=b.r*mix(0.95,1.18,osc(tt,0.8,0.6));
-      const grad=g0.createRadialGradient(x,y,0,x,y,R);
-      grad.addColorStop(0,`rgba(${b.col[0]},${b.col[1]},${b.col[2]},${b.alpha})`);
-      grad.addColorStop(1,`rgba(${b.col[0]},${b.col[1]},${b.col[2]},0)`);
-      g0.fillStyle=grad;
-      g0.beginPath(); g0.arc(x,y,R,0,Math.PI*2); g0.fill();
-    }
-    g0.filter='none';
-    g0.globalCompositeOperation='soft-light';
-    g0.fillStyle='rgba(32,65,106,0.08)'; g0.fillRect(0,0,W,H);
-    g0.restore();
-  }
-  
-  // ↓ faisceaux allégés
-  const BEAMS=[
-    {w:.18, blur:220, hue1:216, hue2:192, a:.38, sp:.18, off:0.0, rot:.05},
-    {w:.15, blur:200, hue1:46,  hue2:28,  a:.32, sp:.16, off:0.9, rot:-.04},
-  ];
-  
-  function drawBeams(t){
-    g1.clearRect(0,0,W,H);
-    g1.save();
-    g1.globalCompositeOperation='screen';
-    g1.filter='blur(28px)';
-  
-    for(const b of BEAMS){
-      const p=t*b.sp+b.off;
-      const y1=H*mix(0.14,0.40,osc(p,0.8,0.2)) + wiggle(p*1.2,.6)*16;
-      const y2=H*mix(0.62,0.88,osc(p,1.25,1.1)) + wiggle(p*1.1,.6)*16;
-      const cx=W*mix(0.18,0.82,osc(p,0.7,0.7)) + wiggle(p,.8)*28;
-      const thick=Math.max(W,H)*b.w;
-  
-      g1.save();
-      const ang=wiggle(p,.5)*b.rot;
-      g1.translate(W*.5,H*.5);
-      g1.rotate(ang);
-      g1.translate(-W*.5,-H*.5);
-  
-      const grad=g1.createLinearGradient(0,y1,W,y2);
-      grad.addColorStop(0,`hsla(${b.hue1} 72% 62% / ${b.a})`);
-      grad.addColorStop(1,`hsla(${b.hue2} 76% 66% / ${b.a*.85})`);
-  
-      g1.strokeStyle=grad;
-      g1.lineCap='round';
-      g1.lineWidth=thick;
-      g1.shadowBlur=b.blur;
-      g1.shadowColor=`hsla(${b.hue2} 90% 70% / .40)`;
-  
-      g1.beginPath();
-      g1.moveTo(-W*0.12,y1);
-      g1.quadraticCurveTo(cx,H*mix(0.22,0.78,osc(p,1.4,0.4)),W*1.12,y2);
-      g1.stroke();
-  
-      g1.globalAlpha=.50;
-      g1.lineWidth=thick*.45;
-      g1.shadowBlur=b.blur*.6;
-      g1.stroke();
-      g1.restore();
-    }
-  
-    g1.filter='none';
-    const glow=g1.createRadialGradient(W*.5,H*.98,0,W*.5,H, W*.58);
-    glow.addColorStop(0,'rgba(140,190,240,.18)');
-    glow.addColorStop(1,'rgba(0,0,0,0)');
-    g1.fillStyle=glow; g1.fillRect(0,0,W,H);
-  
-    g1.restore();
-  }
-  
-  function frame(ts){
-    if(!t0) t0=ts;
-    // ↓ limite d’images/s pour soulager le CPU/GPU
-    if (ts - last < 1000/FPS) { requestAnimationFrame(frame); return; }
-    last = ts;
-  
-    if(!run) return;
-    const t=(ts-t0)/1000;
-    drawMasses(t*1.10);
-    drawBeams(t*1.18);
-    requestAnimationFrame(frame);
-  }
-  
-  document.addEventListener('visibilitychange',()=>{
-    run=!document.hidden;
-    if(run) requestAnimationFrame(frame);
-  });
-  
-  // ↓ coupe la couche beams sur mobile/réduit-mouvement
-  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (innerWidth<768 || prefersReduce) {
-    BEAMS.length = 1; // moins de faisceaux
-  }
-  
-  requestAnimationFrame(frame);
-  </script>
-  
+name: Deploy Astro to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install deps
+        run: npm ci
+      - name: Build (Astro)
+        run: npm run build
+        env:
+          GITHUB_PAGES: "true"
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
