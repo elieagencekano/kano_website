@@ -1,5 +1,5 @@
 import { defineConfig } from "astro/config";
-const isProd = process.env.GITHUB_PAGES === 'true';
+const isProd = process.env.GITHUB_PAGES === "true";
 
 export default defineConfig({
   site: isProd

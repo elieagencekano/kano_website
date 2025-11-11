@@ -2,20 +2,22 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import BackgroundLiquid from "../components/BackgroundLiquid.astro";
+
 const { title = "KANO", description = "" } = Astro.props;
 ---
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`} />
   </head>
   <body>
-    <BackgroundLiquid />
     <Header />
+    <BackgroundLiquid />
     <slot />
   </body>
 </html>
