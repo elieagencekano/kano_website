@@ -16,4 +16,4 @@ Site vitrine officiel de **KANO Consulting**, développé avec [Astro](https://a
 KANO Consulting – Arthur Damas & Élie
 
 ---
-© 2025 KANO – Tous droits réservés.
+© 2025 KANO – Tous droits réservés
