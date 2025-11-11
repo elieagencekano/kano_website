@@ -98,10 +98,10 @@ const proofs = ["Sites optimisés pour convertir", "100% de satisfaction", "Acco
 .card{padding:48px;text-align:left}
 .hero-title{margin:0 0 12px;line-height:1.1}
 .hero-title .brand{display:inline-block;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(2.2rem,4.4vw,3.6rem);background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.95) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-title .main{display:inline-block;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(2.2rem,4.4vw,3.6rem);background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.92) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-title .main{display:inline-block;font-family:Montserrat,sans-serif;font-weight:900;font-size:clamp(2.2rem,4.4vw,3.6rem);background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.92) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:2;padding-bottom:4px}
 .hero-title .subline{display:block;margin-top:10px;font-family:Montserrat,sans-serif;font-weight:500;font-size:clamp(1.4rem,2vw,1.8rem);color:rgba(255,255,255,.9)}
 .strike-word{position:relative;display:inline-block}
-.strike-word::after{content:"";position:absolute;left:0;top:50%;width:0%;height:2px;background:rgba(255,255,255,.85);transform:translateY(-50%);animation:strikeAnim .6s ease-out 2s forwards}
+.strike-word::after{content:"";position:absolute;left:0;top:50%;width:0%;height:2px;background:rgba(255,255,255,.85);transform:translateY(-50%);animation:strikeAnim .6s ease-out 2s forwards;z-index:1}
 @keyframes strikeAnim{to{width:100%}}
 .lead{color:var(--kano-light);opacity:.9;font-size:clamp(1.05rem,1.2vw,1.25rem);line-height:1.6;margin:0 0 18px}
 .proofs{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;padding:0;list-style:none}
