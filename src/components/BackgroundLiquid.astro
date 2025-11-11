@@ -13,9 +13,15 @@
     linear-gradient(180deg,#0b1526 0%, #0a0f16 100%);
 }
 #layer0,#layer1{position:absolute;inset:0;width:100%;height:100%;display:block}
+#layer0{filter:blur(30px)}
+#layer1{filter:blur(25px)}
 .veil{position:absolute;inset:0;background:rgba(10,15,22,.22)}
 .vignette{position:absolute;inset:0;background:
   radial-gradient(120% 95% at 50% 42%, rgba(0,0,0,0) 56%, rgba(0,0,0,.45) 100%)}
+@media (max-width:768px){
+  #layer0{filter:blur(18px)}
+  #layer1{filter:blur(15px)}
+}
 @media (prefers-reduced-motion:reduce){#layer0,#layer1{display:none}}
 </style>
 
@@ -25,7 +31,6 @@ const c1=document.getElementById('layer1'), g1=c1.getContext('2d',{alpha:true,wi
 let W=0,H=0,PR=1,t0=0,run=true,rafId=null;
 
 const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||window.innerWidth<768;
-const blurScale=isMobile?0.5:1;
 const fpsTarget=isMobile?20:30;
 
 function resize(){
@@ -51,16 +56,15 @@ const BLOBS=[
 ];
 
 const BEAMS=[
-  {w:.18, blur:180, hue1:216, hue2:192, a:.38, sp:.16, off:0.0, rot:.05},
-  {w:.15, blur:160, hue1:46,  hue2:28,  a:.32, sp:.14, off:0.9, rot:-.04},
-  {w:.12, blur:140, hue1:210, hue2:228, a:.28, sp:.18, off:1.8, rot:.03}
+  {w:.18, hue1:216, hue2:192, a:.38, sp:.16, off:0.0, rot:.05},
+  {w:.15, hue1:46,  hue2:28,  a:.32, sp:.14, off:0.9, rot:-.04},
+  {w:.12, hue1:210, hue2:228, a:.28, sp:.18, off:1.8, rot:.03}
 ];
 
 function drawMasses(t){
   g0.clearRect(0,0,W,H);
   g0.save();
   g0.globalCompositeOperation='screen';
-  g0.filter=`blur(${40*blurScale}px)`;
   for(const b of BLOBS){
     const tt=t*b.sp+b.off;
     const jx=wiggle(tt*.9,b.amp), jy=wiggle(tt*1.1,b.amp);
@@ -73,7 +77,6 @@ function drawMasses(t){
     g0.fillStyle=grad;
     g0.beginPath(); g0.arc(x,y,R,0,Math.PI*2); g0.fill();
   }
-  g0.filter='none';
   g0.globalCompositeOperation='soft-light';
   g0.fillStyle='rgba(32,65,106,0.08)'; g0.fillRect(0,0,W,H);
   g0.restore();
@@ -83,7 +86,6 @@ function drawBeams(t){
   g1.clearRect(0,0,W,H);
   g1.save();
   g1.globalCompositeOperation='screen';
-  g1.filter=`blur(${32*blurScale}px)`;
 
   for(const b of BEAMS){
     const p=t*b.sp+b.off;
@@ -105,8 +107,6 @@ function drawBeams(t){
     g1.strokeStyle=grad;
     g1.lineCap='round';
     g1.lineWidth=thick;
-    g1.shadowBlur=b.blur*blurScale;
-    g1.shadowColor=`hsla(${b.hue2} 90% 70% / .35)`;
 
     g1.beginPath();
     g1.moveTo(-W*0.12,y1);
@@ -115,12 +115,10 @@ function drawBeams(t){
 
     g1.globalAlpha=.5;
     g1.lineWidth=thick*.4;
-    g1.shadowBlur=b.blur*blurScale*.5;
     g1.stroke();
     g1.restore();
   }
 
-  g1.filter='none';
   const glow=g1.createRadialGradient(W*.5,H*.98,0,W*.5,H, W*.6);
   glow.addColorStop(0,'rgba(140,190,240,.18)');
   glow.addColorStop(1,'rgba(0,0,0,0)');
