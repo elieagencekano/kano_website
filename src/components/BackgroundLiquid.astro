@@ -24,8 +24,12 @@ const c0=document.getElementById('layer0'), g0=c0.getContext('2d',{alpha:true,wi
 const c1=document.getElementById('layer1'), g1=c1.getContext('2d',{alpha:true,willReadFrequently:false});
 let W=0,H=0,PR=1,t0=0,run=true,rafId=null;
 
+const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||window.innerWidth<768;
+const blurScale=isMobile?0.5:1;
+const fpsTarget=isMobile?20:30;
+
 function resize(){
-  PR=Math.min(devicePixelRatio||1,1.5);
+  PR=Math.min(devicePixelRatio||1,isMobile?1:1.5);
   W=c0.width=c1.width=Math.floor(innerWidth*PR);
   H=c0.height=c1.height=Math.floor(innerHeight*PR);
 }
@@ -56,7 +60,7 @@ function drawMasses(t){
   g0.clearRect(0,0,W,H);
   g0.save();
   g0.globalCompositeOperation='screen';
-  g0.filter='blur(40px)';
+  g0.filter=`blur(${40*blurScale}px)`;
   for(const b of BLOBS){
     const tt=t*b.sp+b.off;
     const jx=wiggle(tt*.9,b.amp), jy=wiggle(tt*1.1,b.amp);
@@ -79,7 +83,7 @@ function drawBeams(t){
   g1.clearRect(0,0,W,H);
   g1.save();
   g1.globalCompositeOperation='screen';
-  g1.filter='blur(32px)';
+  g1.filter=`blur(${32*blurScale}px)`;
 
   for(const b of BEAMS){
     const p=t*b.sp+b.off;
@@ -101,7 +105,7 @@ function drawBeams(t){
     g1.strokeStyle=grad;
     g1.lineCap='round';
     g1.lineWidth=thick;
-    g1.shadowBlur=b.blur;
+    g1.shadowBlur=b.blur*blurScale;
     g1.shadowColor=`hsla(${b.hue2} 90% 70% / .35)`;
 
     g1.beginPath();
@@ -111,7 +115,7 @@ function drawBeams(t){
 
     g1.globalAlpha=.5;
     g1.lineWidth=thick*.4;
-    g1.shadowBlur=b.blur*.5;
+    g1.shadowBlur=b.blur*blurScale*.5;
     g1.stroke();
     g1.restore();
   }
@@ -126,8 +130,7 @@ function drawBeams(t){
 }
 
 let lastFrame=0;
-const FPS_TARGET=30;
-const FRAME_INTERVAL=1000/FPS_TARGET;
+const FRAME_INTERVAL=1000/fpsTarget;
 
 function frame(ts){
   if(!t0) t0=ts;
