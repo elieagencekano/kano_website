@@ -6,6 +6,6 @@ export default defineConfig({
   site: isProd
     ? "https://elieagencekano.github.io/kano_website/"
     : "http://localhost:4321",
-  base: isProd ? "/kano_website/" : "/",   // dev = "/", prod = "/kano_website/"
+  base: isProd ? "/kano_website/" : "/",
   outDir: "./dist",
 });
