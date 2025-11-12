@@ -143,11 +143,11 @@ const getIcon = (type: string) => {
 .header-services h2{font-size:clamp(2rem,3.5vw,3rem);margin:0 0 16px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .intro{font-size:1.15rem;color:var(--kano-light);opacity:.88;line-height:1.6;margin:0}
 .carousel-wrapper{position:relative;width:100%;max-width:1200px;margin:0 auto;padding:60px 0;overflow:visible;perspective:1200px;touch-action:pan-y}
-.carousel-track{display:flex;gap:32px;align-items:center;user-select:none;will-change:transform;transition:transform .78s cubic-bezier(.22,.61,.36,1)}
-.carousel-track:active{cursor:auto}
-.carousel-track.no-transition{transition:none}
-.carousel-slide{flex-shrink:0;width:440px;transition:transform .5s cubic-bezier(.22,.61,.36,1),opacity .5s ease,filter .5s ease;transform-style:preserve-3d;transform-origin:center center}
-.service-card{width:100%;height:580px;display:flex;flex-direction:column;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);transition:box-shadow .3s ease;pointer-events:auto}
+.carousel-track{display:flex;gap:32px;align-items:center;user-select:none;transition:transform .8s cubic-bezier(.22,.61,.36,1)}
+.carousel-track.dragging{transition:none}
+@media (pointer:fine){.carousel-track{cursor:grab}.carousel-track.dragging{cursor:grabbing}}
+.carousel-slide{flex-shrink:0;width:440px;transition:transform .55s cubic-bezier(.22,.61,.36,1),opacity .55s ease,filter .55s ease;transform-style:preserve-3d;transform-origin:center center}
+.service-card{width:100%;height:580px;display:flex;flex-direction:column;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);transition:box-shadow .3s ease}
 .icon-wrapper{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(212,175,55,.08));border:1px solid rgba(212,175,55,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
 .service-icon{color:var(--kano-gold);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .carousel-slide:hover .service-icon{transform:scale(1.1) rotate(5deg)}
@@ -162,8 +162,6 @@ const getIcon = (type: string) => {
 .carousel-hint svg:first-child{animation-delay:0s}
 .carousel-hint svg:last-child{animation-delay:1s}
 @keyframes slideHint{0%,100%{transform:translateX(0);opacity:.6}50%{transform:translateX(-4px);opacity:1}}
-@media (pointer:fine){.carousel-track{cursor:auto}}
-@media (pointer:coarse){.carousel-track{cursor:grab}.carousel-track:active{cursor:grabbing}}
 @media (max-width:1200px){.carousel-slide{width:64vw}}
 @media (max-width:1024px){
   .carousel-slide{width:62vw}
@@ -174,8 +172,8 @@ const getIcon = (type: string) => {
   .container-services{padding:0 20px}
   .header-services{margin-bottom:48px}
   .carousel-wrapper{padding:40px 0;perspective:1000px}
-  .carousel-track{gap:24px;transition:transform .9s cubic-bezier(.16,.84,.44,1)}
-  .carousel-slide{width:72vw;max-width:none;transition:transform .75s cubic-bezier(.16,.84,.44,1),opacity .75s ease,filter .75s ease}
+  .carousel-track{gap:24px;transition:transform 1s cubic-bezier(.16,.84,.44,1)}
+  .carousel-slide{width:72vw;max-width:none;transition:transform .9s cubic-bezier(.16,.84,.44,1),opacity .9s ease,filter .9s ease}
   .service-card{height:540px;padding:28px 24px}
   .icon-wrapper{width:64px;height:64px}
   .service-content h3{font-size:1.3rem}
@@ -185,7 +183,7 @@ const getIcon = (type: string) => {
 }
 </style>
 
-<script>
+<script is:client>
 document.addEventListener('DOMContentLoaded', () => {
   const wrapper = document.querySelector('.carousel-wrapper');
   const track = document.querySelector('.carousel-track');
@@ -194,13 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const totalSlides = slides.length;
   let currentIndex = 2;
-  let isTouchDragging = false;
+  let isDragging = false;
   let startX = 0;
   let startY = 0;
+  let lastX = 0;
   let currentTranslate = 0;
-  let prevTranslate = 0;
+  let committedTranslate = 0;
   let dragDirection = null;
-  let isWheelAnimating = false;
 
   function getGap() {
     return window.innerWidth > 768 ? 32 : 24;
@@ -218,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const distance = Math.abs(index - currentIndex);
       let scale, opacity, blur, rotateY;
       if (distance === 0) { scale = 1.08; opacity = 1; blur = 0; rotateY = 0; }
-      else if (distance === 1) { scale = 0.88; opacity = 0.85; blur = 1.2; rotateY = (index > currentIndex ? 1 : -1) * -6; }
+      else if (distance === 1) { scale = 0.88; opacity = 0.85; blur = 1.1; rotateY = (index > currentIndex ? 1 : -1) * -6; }
       else { scale = 0.72; opacity = 0.5; blur = 3; rotateY = (index > currentIndex ? 1 : -1) * -10; }
       slide.style.transform = `scale(${scale}) rotateY(${rotateY}deg)`;
       slide.style.opacity = opacity;
@@ -230,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
     const offset = getSlideOffset(currentIndex);
     track.style.transform = `translateX(${offset}px)`;
-    prevTranslate = offset;
+    committedTranslate = offset;
     currentTranslate = offset;
     updateSlides();
   }
@@ -238,90 +236,71 @@ document.addEventListener('DOMContentLoaded', () => {
   function snapToNearest() {
     const slideWidth = slides[0].offsetWidth;
     const gap = getGap();
-    const slideStep = slideWidth + gap;
-    const movedBy = currentTranslate - prevTranslate;
-    if (Math.abs(movedBy) > slideStep / 4) {
-      if (movedBy < 0 && currentIndex < totalSlides - 1) currentIndex += 1;
-      else if (movedBy > 0 && currentIndex > 0) currentIndex -= 1;
+    const step = slideWidth + gap;
+    const delta = currentTranslate - committedTranslate;
+    if (Math.abs(delta) > step / 5) {
+      if (delta < 0 && currentIndex < totalSlides - 1) currentIndex += 1;
+      if (delta > 0 && currentIndex > 0) currentIndex -= 1;
     }
     goToSlide(currentIndex);
   }
 
-  function handleTouchStart(e) {
-    const t = e.touches[0];
-    startX = t.clientX;
-    startY = t.clientY;
+  function onPointerDown(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    startX = e.clientX;
+    startY = e.clientY;
+    lastX = startX;
     dragDirection = null;
-    isTouchDragging = false;
+    isDragging = false;
+    track.setPointerCapture?.(e.pointerId || 1);
   }
 
-  function handleTouchMove(e) {
-    const t = e.touches[0];
-    const dx = t.clientX - startX;
-    const dy = t.clientY - startY;
+  function onPointerMove(e) {
+    if (startX === 0 && startY === 0) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
     if (dragDirection === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
       dragDirection = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
     }
+
     if (dragDirection === 'h') {
-      if (!isTouchDragging) {
-        isTouchDragging = true;
-        track.classList.add('no-transition');
+      if (!isDragging) {
+        isDragging = true;
+        track.classList.add('dragging');
       }
       e.preventDefault();
-      currentTranslate = prevTranslate + dx;
+      const vx = e.clientX - lastX;
+      lastX = e.clientX;
+      currentTranslate = committedTranslate + dx + vx * 0.05;
       track.style.transform = `translateX(${currentTranslate}px)`;
     }
   }
 
-  function handleTouchEnd() {
-    if (!isTouchDragging) return;
-    isTouchDragging = false;
-    dragDirection = null;
-    track.classList.remove('no-transition');
-    snapToNearest();
-  }
-
-  function handleWheel(e) {
-    if (isWheelAnimating) return;
-    const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if (Math.abs(delta) < 20) return;
-    if (delta > 0 && currentIndex < totalSlides - 1) currentIndex += 1;
-    else if (delta < 0 && currentIndex > 0) currentIndex -= 1;
-    isWheelAnimating = true;
-    goToSlide(currentIndex);
-    setTimeout(() => { isWheelAnimating = false; }, 420);
-  }
-
-  function bindByPointer() {
-    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
-    track.removeEventListener('wheel', handleWheel, { passive: true });
-    document.removeEventListener('touchmove', handleTouchMove, { passive: false });
-    document.removeEventListener('touchend', handleTouchEnd);
-
-    if (isCoarse) {
-      track.addEventListener('touchstart', handleTouchStart, { passive: true });
-      document.addEventListener('touchmove', handleTouchMove, { passive: false });
-      document.addEventListener('touchend', handleTouchEnd);
-    } else {
-      track.addEventListener('wheel', handleWheel, { passive: true });
+  function onPointerUp() {
+    if (isDragging) {
+      track.classList.remove('dragging');
+      snapToNearest();
     }
+    isDragging = false;
+    startX = 0;
+    startY = 0;
+    dragDirection = null;
   }
 
-  function init() {
-    bindByPointer();
-    goToSlide(2);
-  }
+  track.addEventListener('pointerdown', onPointerDown);
+  document.addEventListener('pointermove', onPointerMove, { passive: false });
+  document.addEventListener('pointerup', onPointerUp);
 
-  if (document.readyState === 'complete') init();
-  else window.addEventListener('load', init);
+  function initCarousel() {
+    requestAnimationFrame(() => requestAnimationFrame(() => goToSlide(2)));
+  }
+  if (document.readyState === 'complete') initCarousel(); else window.addEventListener('load', initCarousel);
 
   let resizeTimeout;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      bindByPointer();
-      goToSlide(currentIndex);
-    }, 120);
+    resizeTimeout = setTimeout(() => goToSlide(currentIndex), 120);
   });
 });
 </script>
