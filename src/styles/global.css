@@ -1,6 +1,5 @@
 @import './tokens.css';
 
-/* Reset rapide */
 * {
   box-sizing: border-box;
   margin: 0;

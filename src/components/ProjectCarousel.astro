@@ -1,0 +1,212 @@
+---
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+}
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects = [] } = Astro.props as Props;
+const list = (projects && projects.length)
+  ? projects
+  : Array.from({ length: 3 }).map((_, i) => ({
+      id: String(i + 1),
+      name: `Projet ${i + 1}`,
+      description: `Aperçu en direct`,
+      url: ""
+    }));
+---
+
+<section class="projects-carousel" aria-label="Réalisations">
+  <div class="container-projects">
+    <div class="header-projects">
+      <h2>Nos réalisations</h2>
+      <p class="intro-projects">Découvrez nos derniers projets en direct.</p>
+    </div>
+
+    <div class="carousel-wrapper">
+      <div class="carousel-container">
+        <div class="projects-slider">
+          {list.map((project) => (
+            <div class="carousel-item" data-id={project.id}>
+              <div class="project-card glass">
+                <div class="window-header">
+                  <div class="window-buttons">
+                    <span class="btn red"></span>
+                    <span class="btn yellow"></span>
+                    <span class="btn green"></span>
+                  </div>
+                  <span class="window-url">{(project.url || "aperçu").replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
+                </div>
+                <div class="window-frame">
+                  <iframe
+                    src={project.url || "about:blank"}
+                    srcdoc={project.url ? undefined : '<!doctype html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><style>html,body{margin:0;height:100%;background:linear-gradient(180deg,#0a0f16,#101a26);display:grid;place-items:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif} .chip{padding:.5rem .75rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);color:#cbd5e1;font-size:14px;letter-spacing:.2px} .dot{display:inline-block;width:.5rem;height:.5rem;border-radius:999px;margin-right:.5rem;background:#22c55e;vertical-align:baseline;animation:pulse 1.2s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}</style></head><body><div class="chip"><span class="dot"></span>Aperçu prêt</div></body></html>'}
+                    title={project.name}
+                    loading="eager"
+                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-pointer-lock allow-modals"
+                    referrerpolicy="no-referrer"
+                  ></iframe>
+                </div>
+              </div>
+              <div class="project-details">
+                <h3 class="project-name">{project.name}</h3>
+                <p class="project-desc">{project.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button class="carousel-btn prev" aria-label="Précédent">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button class="carousel-btn next" aria-label="Suivant">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="carousel-dots">
+        {list.map((_, idx) => (
+          <button class="dot" data-index={idx} aria-label={`Projet ${idx + 1}`}></button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-carousel { position: relative; padding: 100px 0; overflow: visible; z-index: 200; }
+  .container-projects { max-width: 1280px; margin: 0 auto; padding: 0 32px; overflow: visible; position: relative; z-index: 200; }
+  .header-projects { text-align: center; max-width: 700px; margin: 0 auto 80px; animation: fadeUp 700ms ease-out; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .header-projects h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin: 0 0 16px; background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.85) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: Montserrat, sans-serif; font-weight: 800; }
+  .intro-projects { font-size: 1.15rem; color: var(--kano-light); opacity: 0.88; line-height: 1.6; margin: 0; }
+
+  .glass { background: rgba(255, 255, 255, 0.06); border: none; backdrop-filter: blur(12px) saturate(120%); -webkit-backdrop-filter: blur(12px) saturate(120%); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); }
+
+  .carousel-wrapper { animation: scaleUp 800ms ease-out 0.2s backwards; overflow: visible; }
+  @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+  .carousel-container { position: relative; width: 100%; min-height: 500px; overflow: visible; }
+
+  .projects-slider { position: relative; height: 620px; overflow: visible; }
+
+  .carousel-item { position: absolute; top: 0; left: 50%; width: min(70vw, 900px); transform: translateX(-50%); display: flex; flex-direction: column; gap: 20px; transition: transform .7s cubic-bezier(.22,.61,.36,1), filter .7s cubic-bezier(.22,.61,.36,1), opacity .7s cubic-bezier(.22,.61,.36,1); will-change: transform, filter, opacity; z-index: 10; }
+  .carousel-item.is-active { transform: translateX(-50%) scale(1); filter: none; opacity: 1; z-index: 100; }
+  .carousel-item.is-right { --gap: 96px; --idx: 1; transform: translateX(calc(-50% + var(--idx) * var(--gap))) scale(calc(1 - var(--idx) * 0.08)); filter: blur(calc(2px + (var(--idx) - 1) * 1px)); opacity: calc(0.9 - var(--idx) * 0.12); z-index: calc(99 - var(--idx)); pointer-events: none; }
+  .carousel-item.is-left { transform: translateX(calc(-50% - 40vw)) scale(0.9); opacity: 0; filter: blur(6px); z-index: 1; pointer-events: none; }
+
+  .project-card { width: 100%; height: 550px; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; background: rgba(15, 20, 25, 0.95); position: relative; }
+
+  .window-header { height: 36px; position: relative; z-index: 20; background: rgba(8,12,18,0.28); backdrop-filter: saturate(120%) blur(14px); -webkit-backdrop-filter: saturate(120%) blur(14px); display: flex; align-items: center; gap: 12px; padding: 0 14px; flex-shrink: 0; overflow: visible; }
+  .window-header::after { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 45%, rgba(0,0,0,0.2) 100%); pointer-events: none; }
+  .window-buttons { display: flex; gap: 8px; position: relative; z-index: 1; }
+  .btn { width: 12px; height: 12px; border-radius: 50%; display: block; }
+  .btn.red { background: #ff5f57; }
+  .btn.yellow { background: #febc2e; }
+  .btn.green { background: #28c840; }
+  .window-url { position: relative; z-index: 1; font-family: Poppins, sans-serif; font-size: 12px; color: rgba(255, 255, 255, 0.7); margin-left: 8px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .window-frame { flex: 1; position: relative; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); overflow: hidden; }
+  .window-frame::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 120% at 0% 0%, rgba(255,255,255,0.06) 0%, transparent 50%), radial-gradient(120% 120% at 100% 100%, rgba(255,255,255,0.04) 0%, transparent 50%); pointer-events: none; opacity: 1; transition: opacity .2s ease; }
+  .window-frame.is-loaded::after { opacity: 0; }
+  .window-frame.is-failed::before { content: "Aperçu indisponible"; position: absolute; inset: auto 12px 12px 12px; display: inline-block; padding: .5rem .75rem; font-size: 12px; color: #cbd5e1; background: rgba(10, 15, 20, 0.6); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; backdrop-filter: blur(8px); }
+
+  .window-frame iframe { position: absolute; top: 0; left: 0; width: 133.334%; height: 133.334%; border: none; display: block; transform: scale(0.75); transform-origin: 0 0; }
+
+  .project-details { display: flex; flex-direction: column; gap: 8px; }
+  .project-name { font-size: 1.1rem; font-weight: 800; color: #fff; margin: 0; font-family: Montserrat, sans-serif; }
+  .project-desc { font-size: 0.9rem; color: var(--kano-light); opacity: 0.8; line-height: 1.5; margin: 0; }
+
+  .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 120; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .carousel-btn:hover { background: rgba(255, 255, 255, 0.15); box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2); }
+  .carousel-btn.prev { left: 12px; }
+  .carousel-btn.next { right: 12px; }
+
+  .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 40px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .dot.active { background: var(--kano-gold); }
+
+  @media (max-width: 1024px) {
+    .carousel-item { width: min(80vw, 720px); }
+    .project-card { height: 480px; }
+  }
+
+  @media (max-width: 768px) {
+    .projects-carousel { padding: 80px 0; }
+    .container-projects { padding: 0 20px; }
+    .header-projects { margin-bottom: 60px; }
+    .projects-slider { height: 640px; }
+    .carousel-item { width: calc(100vw - 40px); }
+    .project-card { height: 620px; aspect-ratio: 9 / 16; border-radius: 16px; }
+    .window-frame iframe { width: 153.847%; height: 153.847%; transform: scale(0.65); }
+    .carousel-btn { width: 36px; height: 36px; }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
+    .project-name { font-size: 1rem; }
+    .project-desc { font-size: 0.85rem; }
+    .carousel-dots { gap: 6px; margin-top: 60px; }
+    .dot { width: 8px; height: 8px; }
+  }
+</style>
+
+<script is:inline>
+  function initCarousel() {
+    const slider = document.querySelector('.projects-slider');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+    const dots = document.querySelectorAll('.carousel-dots .dot');
+    const items = Array.from(document.querySelectorAll('.carousel-item'));
+    if (!slider || !items.length) return;
+
+    let currentIndex = 0;
+
+    function applyPositions() {
+      items.forEach((item, idx) => {
+        item.classList.remove('is-active','is-right','is-left');
+        const offset = idx - currentIndex;
+        if (offset === 0) {
+          item.classList.add('is-active');
+        } else if (offset > 0) {
+          item.classList.add('is-right');
+          item.style.setProperty('--idx', String(Math.min(offset, 3)));
+        } else {
+          item.classList.add('is-left');
+        }
+      });
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+    }
+
+    function next() { currentIndex = Math.min(currentIndex + 1, items.length - 1); applyPositions(); }
+    function prev() { currentIndex = Math.max(currentIndex - 1, 0); applyPositions(); }
+
+    prevBtn?.addEventListener('click', prev);
+    nextBtn?.addEventListener('click', next);
+    dots.forEach((dot, idx) => { dot.addEventListener('click', () => { currentIndex = idx; applyPositions(); }); });
+
+    let startX = 0; let tracking = false;
+    slider.addEventListener('pointerdown', (e) => { tracking = true; startX = e.clientX; slider.setPointerCapture(e.pointerId); });
+    slider.addEventListener('pointerup', (e) => { if (!tracking) return; const dx = e.clientX - startX; if (dx < -40) next(); else if (dx > 40) prev(); tracking = false; });
+    slider.addEventListener('pointercancel', () => { tracking = false; });
+
+    applyPositions();
+
+    document.querySelectorAll('.window-frame').forEach((frame) => {
+      const iframe = frame.querySelector('iframe');
+      if (!iframe) return;
+      const markLoaded = () => frame.classList.add('is-loaded');
+      iframe.addEventListener('load', markLoaded, { once: true });
+      setTimeout(() => { if (!frame.classList.contains('is-loaded')) frame.classList.add('is-failed'); }, 1500);
+    });
+  }
+
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCarousel); } else { initCarousel(); }
+</script>
