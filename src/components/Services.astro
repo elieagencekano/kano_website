@@ -84,7 +84,7 @@ const getIcon = (type: string) => {
     <div class="carousel-wrapper">
       <div class="carousel-track">
         {services.map((service, index) => (
-          <div class="carousel-slide" data-index={index}>
+          <div class="carousel-slide" data-index={index} tabindex="0">
             <div class="service-card glass">
               <div class="icon-wrapper">
                 <svg 
@@ -146,7 +146,8 @@ const getIcon = (type: string) => {
 .carousel-track{display:flex;gap:32px;align-items:center;user-select:none;transition:transform .8s cubic-bezier(.22,.61,.36,1)}
 .carousel-track.dragging{transition:none}
 @media (pointer:fine){.carousel-track{cursor:grab}.carousel-track.dragging{cursor:grabbing}}
-.carousel-slide{flex-shrink:0;width:440px;transition:transform .55s cubic-bezier(.22,.61,.36,1),opacity .55s ease,filter .55s ease;transform-style:preserve-3d;transform-origin:center center}
+.carousel-slide{flex-shrink:0;width:440px;transition:transform .55s cubic-bezier(.22,.61,.36,1),opacity .55s ease,filter .55s ease;transform-style:preserve-3d;transform-origin:center center;outline:none}
+.carousel-slide:not(.active){cursor:pointer}
 .service-card{width:100%;height:580px;display:flex;flex-direction:column;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);transition:box-shadow .3s ease}
 .icon-wrapper{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(212,175,55,.08));border:1px solid rgba(212,175,55,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
 .service-icon{color:var(--kano-gold);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
@@ -172,8 +173,8 @@ const getIcon = (type: string) => {
   .container-services{padding:0 20px}
   .header-services{margin-bottom:48px}
   .carousel-wrapper{padding:40px 0;perspective:1000px}
-  .carousel-track{gap:24px;transition:transform 1s cubic-bezier(.16,.84,.44,1)}
-  .carousel-slide{width:72vw;max-width:none;transition:transform .9s cubic-bezier(.16,.84,.44,1),opacity .9s ease,filter .9s ease}
+  .carousel-track{gap:24px;transition:transform 1.05s cubic-bezier(.16,.84,.44,1)}
+  .carousel-slide{width:72vw;max-width:none;transition:transform .95s cubic-bezier(.16,.84,.44,1),opacity .95s ease,filter .95s ease}
   .service-card{height:540px;padding:28px 24px}
   .icon-wrapper{width:64px;height:64px}
   .service-content h3{font-size:1.3rem}
@@ -187,7 +188,7 @@ const getIcon = (type: string) => {
 document.addEventListener('DOMContentLoaded', () => {
   const wrapper = document.querySelector('.carousel-wrapper');
   const track = document.querySelector('.carousel-track');
-  const slides = document.querySelectorAll('.carousel-slide');
+  const slides = [...document.querySelectorAll('.carousel-slide')];
   if (!wrapper || !track || slides.length === 0) return;
 
   const totalSlides = slides.length;
@@ -199,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentTranslate = 0;
   let committedTranslate = 0;
   let dragDirection = null;
+  let clickGuard = false;
 
   function getGap() {
     return window.innerWidth > 768 ? 32 : 24;
@@ -209,6 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const gap = getGap();
     const centerOffset = wrapper.clientWidth / 2 - slideWidth / 2;
     return centerOffset - index * (slideWidth + gap);
+  }
+
+  function markActive() {
+    slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
   }
 
   function updateSlides() {
@@ -222,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
       slide.style.opacity = opacity;
       slide.style.filter = `blur(${blur}px)`;
     });
+    markActive();
   }
 
   function goToSlide(index) {
@@ -252,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lastX = startX;
     dragDirection = null;
     isDragging = false;
+    clickGuard = false;
     track.setPointerCapture?.(e.pointerId || 1);
   }
 
@@ -259,11 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (startX === 0 && startY === 0) return;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-
     if (dragDirection === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
       dragDirection = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
     }
-
     if (dragDirection === 'h') {
       if (!isDragging) {
         isDragging = true;
@@ -274,6 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lastX = e.clientX;
       currentTranslate = committedTranslate + dx + vx * 0.05;
       track.style.transform = `translateX(${currentTranslate}px)`;
+      if (Math.abs(dx) > 8) clickGuard = true;
     }
   }
 
@@ -286,8 +293,18 @@ document.addEventListener('DOMContentLoaded', () => {
     startX = 0;
     startY = 0;
     dragDirection = null;
+    setTimeout(() => (clickGuard = false), 0);
   }
 
+  function onSlideClick(e) {
+    const slide = e.currentTarget;
+    const index = Number(slide.getAttribute('data-index'));
+    if (clickGuard) return;
+    if (index === currentIndex) return;
+    goToSlide(index);
+  }
+
+  slides.forEach(slide => slide.addEventListener('click', onSlideClick));
   track.addEventListener('pointerdown', onPointerDown);
   document.addEventListener('pointermove', onPointerMove, { passive: false });
   document.addEventListener('pointerup', onPointerUp);
@@ -301,6 +318,16 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => goToSlide(currentIndex), 120);
+  });
+
+  slides.forEach(slide => {
+    slide.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const index = Number(slide.getAttribute('data-index'));
+        if (index !== currentIndex) goToSlide(index);
+      }
+    });
   });
 });
 </script>
