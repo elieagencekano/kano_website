@@ -52,30 +52,32 @@ const getIcon = (type: string) => {
     </div>
 
     <div class="carousel-wrapper" data-carousel>
-      <div class="carousel-track" role="list">
-        {services.map((service, index) => (
-          <div class="carousel-slide" data-index={index} data-id={service.id} role="listitem" tabindex="0" aria-selected="false">
-            <div class="service-card glass">
-              <div class="icon-wrapper">
-                <svg class="service-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <Fragment set:html={getIcon(service.icon)} />
-                </svg>
-              </div>
-              <div class="service-content">
-                <h3>{service.title}</h3>
-                <p class="subtitle">{service.subtitle}</p>
-                <ul class="benefits-list">
-                  {service.benefits.map((benefit) => (
-                    <li>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12L10 17L20 7"/></svg>
-                      <span>{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
+      <div class="carousel-viewport">
+        <div class="carousel-track" role="list">
+          {services.map((service, index) => (
+            <div class="carousel-slide" data-index={index} data-id={service.id} role="listitem" tabindex="0" aria-selected="false">
+              <div class="service-card glass">
+                <div class="icon-wrapper">
+                  <svg class="service-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <Fragment set:html={getIcon(service.icon)} />
+                  </svg>
+                </div>
+                <div class="service-content">
+                  <h3>{service.title}</h3>
+                  <p class="subtitle">{service.subtitle}</p>
+                  <ul class="benefits-list">
+                    {service.benefits.map((benefit) => (
+                      <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12L10 17L20 7"/></svg>
+                        <span>{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <div class="carousel-hint">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
@@ -88,20 +90,19 @@ const getIcon = (type: string) => {
 </section>
 
 <style>
-:root{--gap-desktop:32px;--gap-mobile:24px}
-.services{position:relative;padding:120px 0;overflow-x:clip;overflow-y:visible;z-index:1}
-.container-services{max-width:1380px;margin:0 auto;padding:0 32px;overflow:visible}
+.services{position:relative;padding:120px 0;overflow:hidden;z-index:1}
+.container-services{max-width:1380px;margin:0 auto;padding:0 32px}
 .header-services{text-align:center;max-width:680px;margin:0 auto 64px;animation:fadeUp 700ms ease-out}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .header-services h2{font-size:clamp(2rem,3.5vw,3rem);margin:0 0 16px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .intro{font-size:1.15rem;color:var(--kano-light);opacity:.88;line-height:1.6;margin:0}
-.carousel-wrapper{position:relative;width:100%;max-width:1200px;margin:0 auto;padding:60px 0;overflow:visible;perspective:1400px}
-.carousel-track{display:flex;gap:var(--gap-desktop);align-items:center;user-select:none;transition:transform .85s cubic-bezier(.2,.75,.25,1)}
-.carousel-track.dragging{transition:none}
-@media (pointer:fine){.carousel-track{cursor:default}}
-@media (pointer:coarse){.carousel-track{cursor:grab}.carousel-track.dragging{cursor:grabbing}}
-.carousel-slide{flex-shrink:0;width:440px;outline:none;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.22,.61,.36,1),opacity .45s ease,filter .45s ease}
-.service-card{width:100%;height:580px;display:flex;flex-direction:column;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);transition:box-shadow .3s ease,transform .3s ease}
+.carousel-wrapper{position:relative;width:100%;max-width:1200px;margin:0 auto;padding:60px 0;perspective:1400px}
+.carousel-viewport{position:relative;height:600px;overflow:visible}
+.carousel-track{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;transition:none}
+.carousel-slide{position:absolute;left:0;width:440px;height:580px;outline:none;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.22,.61,.36,1),opacity .6s cubic-bezier(.22,.61,.36,1),filter .6s cubic-bezier(.22,.61,.36,1);will-change:transform,opacity,filter;cursor:pointer}
+.carousel-slide[aria-selected="true"]{cursor:default}
+.service-card{width:100%;height:100%;display:flex;flex-direction:column;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);transition:box-shadow .3s ease}
+.carousel-slide:hover .service-card{box-shadow:0 24px 70px rgba(0,0,0,.5)}
 .icon-wrapper{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(212,175,55,.08));border:1px solid rgba(212,175,55,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
 .service-icon{color:var(--kano-gold);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .carousel-slide:hover .service-icon{transform:scale(1.04) rotate(3deg)}
@@ -117,17 +118,20 @@ const getIcon = (type: string) => {
 .carousel-hint svg:last-child{animation-delay:1s}
 .hint-mobile{display:none}
 @keyframes slideHint{0%,100%{transform:translateX(0);opacity:.6}50%{transform:translateX(-4px);opacity:1}}
-@media (max-width:768px){.hint-desktop{display:none}.hint-mobile{display:inline}}
-@media (max-width:1200px){.carousel-slide{width:64vw}}
-@media (max-width:1024px){.carousel-slide{width:62vw}.service-card{height:560px;padding:32px 28px}}
+@media (max-width:1024px){
+  .carousel-slide{width:380px;height:540px;cursor:default}
+  .service-card{padding:32px 28px}
+  .hint-desktop{display:none}
+  .hint-mobile{display:inline}
+}
 @media (max-width:768px){
   .services{padding:80px 0}
   .container-services{padding:0 20px}
   .header-services{margin-bottom:48px}
   .carousel-wrapper{padding:40px 0;perspective:1200px}
-  .carousel-track{gap:var(--gap-mobile);transition:transform .9s cubic-bezier(.2,.75,.25,1)}
-  .carousel-slide{width:72vw;max-width:none}
-  .service-card{height:540px;padding:28px 24px}
+  .carousel-viewport{height:560px}
+  .carousel-slide{width:min(340px,85vw);height:540px}
+  .service-card{padding:28px 24px}
   .icon-wrapper{width:64px;height:64px}
   .service-content h3{font-size:1.3rem}
   .subtitle{font-size:.98rem;margin-bottom:22px}
@@ -138,162 +142,187 @@ const getIcon = (type: string) => {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const wrapper = document.querySelector('.carousel-wrapper');
+  const viewport = document.querySelector('.carousel-viewport');
   const track = document.querySelector('.carousel-track');
   const slides = [...document.querySelectorAll('.carousel-slide')];
-  if (!wrapper || !track || slides.length === 0) return;
+  if (!viewport || !track || slides.length === 0) return;
 
-  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
   const totalSlides = slides.length;
+  const CARD_WIDTH = 440;
+  const GAP = 32;
+  const CARD_STEP = CARD_WIDTH + GAP;
 
-  let currentIndex = 0;
+  let currentIndex = 2;
+  let isDragging = false;
   let startX = 0;
   let startY = 0;
-  let currentTranslate = 0;
-  let committedTranslate = 0;
+  let currentX = 0;
   let dragDirection = null;
-  let rafId = null;
 
-  function gap() {
-    const g = getComputedStyle(track).gap;
-    return g ? parseFloat(g) : (window.innerWidth > 768 ? 32 : 24);
-  }
-  function wSlide(){ return slides[0].offsetWidth; }
-  function wWrapper(){ return wrapper.clientWidth; }
-  function step(){ return wSlide() + gap(); }
-  function centerOffset(){ return (wWrapper() - wSlide()) / 2; }
+  const isTouch = 'ontouchstart' in window;
+  const isTablet = window.matchMedia('(min-width: 769px) and (max-width: 1024px)').matches;
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-  function translateFor(index){
-    return centerOffset() - index * step();
+  function getScaleForDistance(distance) {
+    const abs = Math.abs(distance);
+    if (abs === 0) return 1.06;
+    if (abs === 1) return 0.90;
+    if (abs === 2) return 0.78;
+    return 0.70;
   }
 
-  function setAria(){
-    slides.forEach((s,i)=>s.setAttribute('aria-selected', i===currentIndex ? 'true':'false'));
+  function getOpacityForDistance(distance) {
+    const abs = Math.abs(distance);
+    if (abs === 0) return 1;
+    if (abs === 1) return 0.85;
+    if (abs === 2) return 0.65;
+    return 0.45;
   }
 
-  function goToSlide(index, animate = true){
-    currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
-    const target = translateFor(currentIndex);
-    if(!animate) track.style.transition = 'none';
-    track.style.transform = `translateX(${target}px)`;
-    committedTranslate = target;
-    currentTranslate = target;
-    setAria();
-    if(!animate) requestAnimationFrame(()=>{ track.style.transition = ''; });
-    startRAF();
+  function getBlurForDistance(distance) {
+    const abs = Math.abs(distance);
+    if (abs === 0) return 0;
+    if (abs === 1) return 1;
+    if (abs === 2) return 2.5;
+    return 4;
   }
 
-  function virtualIndex(){
-    return (-currentTranslate + centerOffset()) / step();
+  function getRotateYForDistance(distance) {
+    if (distance === 0) return 0;
+    return -distance * 8;
   }
 
-  function lerp(a,b,t){ return a + (b-a)*t; }
-  function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+  function updateSlides(animate = true) {
+    const viewportCenter = viewport.offsetWidth / 2;
 
-  function updateSlidesDynamic(){
-    const vi = virtualIndex();
-    const baseW = wSlide();
-    slides.forEach((slide,i)=>{
-      const dist = i - vi;
-      const ad = Math.abs(dist);
+    slides.forEach((slide, index) => {
+      const distance = index - currentIndex;
+      const scale = getScaleForDistance(distance);
+      
+      let cumulativeOffset = 0;
+      if (distance > 0) {
+        for (let i = 1; i <= distance; i++) {
+          const prevScale = getScaleForDistance(i - 1);
+          const currentScale = getScaleForDistance(i);
+          const prevWidth = CARD_WIDTH * prevScale;
+          const currentWidth = CARD_WIDTH * currentScale;
+          cumulativeOffset += (prevWidth / 2) + GAP + (currentWidth / 2);
+        }
+      } else if (distance < 0) {
+        for (let i = -1; i >= distance; i--) {
+          const prevScale = getScaleForDistance(i + 1);
+          const currentScale = getScaleForDistance(i);
+          const prevWidth = CARD_WIDTH * prevScale;
+          const currentWidth = CARD_WIDTH * currentScale;
+          cumulativeOffset -= (prevWidth / 2) + GAP + (currentWidth / 2);
+        }
+      }
 
-      const sActive = 1.06;
-      const sAdj = 0.9;
-      const sNext = 0.8;
-      const sFar = 0.72;
+      const xPosition = viewportCenter + cumulativeOffset;
+      const opacity = getOpacityForDistance(distance);
+      const blur = getBlurForDistance(distance);
+      const rotateY = getRotateYForDistance(distance);
+      const zIndex = 100 - Math.abs(distance) * 10;
 
-      let scale;
-      if (ad <= 1) scale = lerp(sActive, sAdj, ad);
-      else if (ad <= 2) scale = lerp(sAdj, sNext, ad - 1);
-      else scale = lerp(sNext, sFar, Math.min(1, ad - 2));
+      if (!animate) {
+        slide.style.transition = 'none';
+      }
 
-      const dir = dist === 0 ? 0 : (dist > 0 ? -1 : 1);
-      const offsetX = (1 - scale) * baseW * 0.5 * dir;
-
-      const opacity = clamp(1 - ad * 0.2, 0.5, 1);
-      const blur = clamp(ad * 1.1, 0, 3);
-      const rotateY = clamp(-dist * 10, -12, 12);
-
-      slide.style.transform = `translateX(${offsetX}px) scale(${scale}) rotateY(${rotateY}deg) translateZ(0)`;
+      slide.style.transform = `translateX(-50%) translateX(${xPosition}px) scale(${scale}) rotateY(${rotateY}deg) translateZ(0)`;
       slide.style.opacity = String(opacity);
       slide.style.filter = `blur(${blur}px)`;
-      slide.style.zIndex = String(100 - Math.round(ad * 10));
+      slide.style.zIndex = String(zIndex);
+      slide.setAttribute('aria-selected', distance === 0 ? 'true' : 'false');
+
+      if (!animate) {
+        requestAnimationFrame(() => {
+          slide.style.transition = '';
+        });
+      }
     });
   }
 
-  function startRAF(){
-    cancelAnimationFrame(rafId);
-    const loop = () => { updateSlidesDynamic(); rafId = requestAnimationFrame(loop); };
-    rafId = requestAnimationFrame(loop);
-  }
-  function stopRAF(){ cancelAnimationFrame(rafId); rafId = null; }
-
-  function onPointerDown(e){
-    if(!isCoarse) return;
-    if(e.button !== undefined && e.button !== 0) return;
-    startX = e.clientX; startY = e.clientY; dragDirection = null;
-    track.classList.add('dragging'); e.preventDefault();
-  }
-  function onPointerMove(e){
-    if(!isCoarse) return;
-    if(!track.classList.contains('dragging')) return;
-    const dx = e.clientX - startX; const dy = e.clientY - startY;
-    if (dragDirection === null && (Math.abs(dx)>8 || Math.abs(dy)>8)) {
-      dragDirection = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
-    }
-    if (dragDirection === 'h') {
-      currentTranslate = committedTranslate + dx;
-      track.style.transform = `translateX(${currentTranslate}px)`;
-      e.preventDefault();
-      updateSlidesDynamic();
-    }
-  }
-  function onPointerUp(){
-    if(!isCoarse) return;
-    if(!track.classList.contains('dragging')) return;
-    track.classList.remove('dragging');
-    const moved = currentTranslate - committedTranslate;
-    const s = step();
-    if (Math.abs(moved) > s/4) {
-      if (moved < 0 && currentIndex < totalSlides - 1) currentIndex += 1;
-      else if (moved > 0 && currentIndex > 0) currentIndex -= 1;
-    }
-    goToSlide(currentIndex);
+  function goToSlide(index, animate = true) {
+    currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
+    updateSlides(animate);
   }
 
-  track.addEventListener('pointerdown', onPointerDown);
-  document.addEventListener('pointermove', onPointerMove);
-  document.addEventListener('pointerup', onPointerUp);
-
-  slides.forEach(slide=>{
-    slide.addEventListener('click', ()=>{
-      const idx = Number(slide.getAttribute('data-index'));
-      if (window.matchMedia('(pointer: fine)').matches && idx !== currentIndex) goToSlide(idx);
-    });
-    slide.addEventListener('keydown',(e)=>{
-      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); const idx=Number(slide.getAttribute('data-index')); if(idx!==currentIndex) goToSlide(idx); }
-    });
+  slides.forEach((slide, index) => {
+    if (!isTouch) {
+      slide.addEventListener('click', () => {
+        if (index !== currentIndex) {
+          goToSlide(index);
+        }
+      });
+    }
   });
 
-  document.addEventListener('keydown',(e)=>{
-    if(e.key==='ArrowRight') goToSlide(currentIndex+1);
-    if(e.key==='ArrowLeft') goToSlide(currentIndex-1);
+  if (isTouch) {
+    let initialTranslate = 0;
+
+    track.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      dragDirection = null;
+      initialTranslate = 0;
+    });
+
+    track.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      const deltaX = touchX - startX;
+      const deltaY = touchY - startY;
+
+      if (dragDirection === null && (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5)) {
+        dragDirection = Math.abs(deltaX) > Math.abs(deltaY) ? 'horizontal' : 'vertical';
+      }
+
+      if (dragDirection === 'horizontal') {
+        e.preventDefault();
+        currentX = deltaX;
+      }
+    });
+
+    track.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+
+      if (dragDirection === 'horizontal') {
+        const threshold = CARD_WIDTH / 3;
+        
+        if (currentX < -threshold && currentIndex < totalSlides - 1) {
+          goToSlide(currentIndex + 1);
+        } else if (currentX > threshold && currentIndex > 0) {
+          goToSlide(currentIndex - 1);
+        } else {
+          updateSlides(true);
+        }
+      }
+
+      currentX = 0;
+      dragDirection = null;
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' && currentIndex < totalSlides - 1) {
+      goToSlide(currentIndex + 1);
+    } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+      goToSlide(currentIndex - 1);
+    }
   });
 
-  track.addEventListener('transitionend', ()=>{ stopRAF(); updateSlidesDynamic(); });
-
-  function init(){
-    const centerId = 'web';
-    const initial = slides.findIndex(s=>s.getAttribute('data-id')===centerId);
-    goToSlide(initial >= 0 ? initial : 2, false);
-    updateSlidesDynamic();
-  }
-  if(document.readyState==='complete') init(); else window.addEventListener('load', init);
+  goToSlide(currentIndex, false);
 
   let resizeTimeout;
-  window.addEventListener('resize', ()=>{
+  window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(()=>{ goToSlide(currentIndex, false); updateSlidesDynamic(); }, 80);
+    resizeTimeout = setTimeout(() => {
+      goToSlide(currentIndex, false);
+    }, 100);
   });
 });
 </script>
