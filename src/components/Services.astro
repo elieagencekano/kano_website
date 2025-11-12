@@ -1,0 +1,276 @@
+---
+const services = [
+  {
+    id: "seo",
+    title: "SEO",
+    subtitle: "Visibilité organique durable",
+    icon: "search",
+    benefits: [
+      "Audit complet : analyse technique et sémantique de votre présence en ligne",
+      "Stratégie de contenu : mots-clés ciblés pour votre secteur et zone géographique",
+      "Optimisation technique : vitesse, structure, crawlabilité parfaite",
+      "Suivi mensuel : rapports clairs sur votre progression dans les résultats Google"
+    ]
+  },
+  {
+    id: "sea",
+    title: "SEA",
+    subtitle: "Google Ads & Retargeting",
+    icon: "target",
+    benefits: [
+      "Campagnes rentables : budget optimisé pour maximiser vos conversions",
+      "Ciblage précis : touchez vos clients idéaux au bon moment",
+      "Retargeting intelligent : reconvertissez les visiteurs qui n'ont pas encore acheté",
+      "Reporting transparent : ROI clair sur chaque euro investi"
+    ]
+  },
+  {
+    id: "web",
+    title: "Création de site web 100% codé",
+    subtitle: "Sur-mesure, rapide, optimisé",
+    icon: "code",
+    benefits: [
+      "Performance maximale : sites ultra-rapides qui chargent en moins d'1 seconde",
+      "Design unique : aucun template, votre identité est respectée à 100%",
+      "SEO natif : optimisé pour Google dès la première ligne de code",
+      "Maintenance simplifiée : pas de plugins obsolètes, contrôle total"
+    ]
+  },
+  {
+    id: "innovation",
+    title: "Innovation digitale",
+    subtitle: "Automatisation & IA",
+    icon: "spark",
+    benefits: [
+      "Automatisation marketing : gagnez du temps sur les tâches répétitives",
+      "Chatbots & IA : support client 24/7 et qualification de leads automatique",
+      "Analyse prédictive : anticipez les comportements de vos clients",
+      "Intégrations sur-mesure : connectez tous vos outils pour un workflow fluide"
+    ]
+  },
+  {
+    id: "analytics",
+    title: "Analytics & Data",
+    subtitle: "Mesure et optimisation",
+    icon: "chart",
+    benefits: [
+      "Tableaux de bord personnalisés : visualisez vos KPIs en temps réel",
+      "Tracking précis : comprenez le parcours complet de vos visiteurs",
+      "Rapports actionnables : recommandations concrètes basées sur vos données",
+      "A/B testing : optimisez continuellement vos conversions"
+    ]
+  }
+];
+
+const getIcon = (type: string) => {
+  const icons = {
+    code: `<path d="M16 18L22 12L16 6"/><path d="M8 6L2 12L8 18"/>`,
+    search: `<circle cx="11" cy="11" r="8"/><path d="M21 21L16.65 16.65"/>`,
+    target: `<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>`,
+    spark: `<path d="M12 2L15 8.5L22 9L17 14L18 21L12 17.5L6 21L7 14L2 9L9 8.5L12 2Z"/>`,
+    chart: `<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>`
+  };
+  return icons[type] || icons.spark;
+};
+---
+
+<section class="services" id="solutions" aria-label="Nos prestations">
+  <div class="container-services">
+    <div class="header-services">
+      <h2>Ce qu'on fait vraiment bien</h2>
+      <p class="intro">Des prestations concrètes qui génèrent des résultats mesurables pour votre entreprise.</p>
+    </div>
+
+    <div class="carousel-wrapper">
+      <div class="carousel-track">
+        {services.map((service, index) => (
+          <div class="carousel-slide" data-index={index}>
+            <div class="service-card glass">
+              <div class="icon-wrapper">
+                <svg 
+                  class="service-icon" 
+                  width="32" 
+                  height="32" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"
+                >
+                  <Fragment set:html={getIcon(service.icon)} />
+                </svg>
+              </div>
+              
+              <div class="service-content">
+                <h3>{service.title}</h3>
+                <p class="subtitle">{service.subtitle}</p>
+                
+                <ul class="benefits-list">
+                  {service.benefits.map((benefit) => (
+                    <li>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 12L10 17L20 7"/>
+                      </svg>
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div class="carousel-hint">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+        <span>Glissez pour explorer</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.services{position:relative;padding:120px 0;overflow:hidden;z-index:1}
+.container-services{max-width:1380px;margin:0 auto;padding:0 32px}
+.header-services{text-align:center;max-width:680px;margin:0 auto 64px;animation:fadeUp 700ms ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.header-services h2{font-size:clamp(2rem,3.5vw,3rem);margin:0 0 16px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.intro{font-size:1.15rem;color:var(--kano-light);opacity:.88;line-height:1.6;margin:0}
+.carousel-wrapper{position:relative;width:100%;max-width:1200px;margin:0 auto;padding:60px 0;overflow:visible;perspective:1200px}
+.carousel-track{display:flex;gap:32px;align-items:center;cursor:grab;user-select:none;will-change:transform;transition:transform .5s cubic-bezier(.25,.46,.45,.94)}
+.carousel-track:active{cursor:grabbing}
+.carousel-track.no-transition{transition:none}
+.carousel-slide{flex-shrink:0;width:440px;transition:transform .4s cubic-bezier(.25,.46,.45,.94),opacity .4s ease,filter .4s ease;transform-style:preserve-3d;transform-origin:center center}
+.service-card{width:100%;height:580px;display:flex;flex-direction:column;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);transition:box-shadow .3s ease;pointer-events:auto}
+.icon-wrapper{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(212,175,55,.08));border:1px solid rgba(212,175,55,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+.service-icon{color:var(--kano-gold);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.carousel-slide:hover .service-icon{transform:scale(1.1) rotate(5deg)}
+.service-content{text-align:center;flex:1;display:flex;flex-direction:column}
+.service-content h3{font-size:1.5rem;font-weight:800;color:#fff;margin:0 0 10px;letter-spacing:.3px}
+.subtitle{font-size:1.05rem;color:var(--kano-light);opacity:.85;margin:0 0 28px;font-weight:500}
+.benefits-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:0;padding:0;text-align:left}
+.benefits-list li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;color:var(--kano-light);font-size:.95rem;line-height:1.55;opacity:.9}
+.benefits-list svg{color:var(--kano-gold);margin-top:2px;flex-shrink:0}
+.carousel-hint{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:32px;color:var(--kano-light);opacity:.6;font-size:.9rem;animation:fadeUp 1s ease-out .8s backwards}
+.carousel-hint svg{color:var(--kano-gold);animation:slideHint 2s ease-in-out infinite}
+.carousel-hint svg:first-child{animation-delay:0s}
+.carousel-hint svg:last-child{animation-delay:1s}
+@keyframes slideHint{0%,100%{transform:translateX(0);opacity:.6}50%{transform:translateX(-4px);opacity:1}}
+@media (max-width:1200px){.carousel-slide{width:70vw}}
+@media (max-width:1024px){.carousel-slide{width:68vw}.service-card{height:560px;padding:32px 28px}}
+@media (max-width:768px){.services{padding:80px 0}.container-services{padding:0 20px}.header-services{margin-bottom:48px}.carousel-wrapper{padding:40px 0;perspective:1000px}.carousel-track{gap:24px}.carousel-slide{width:78vw;max-width:none}.service-card{height:540px;padding:28px 24px}.icon-wrapper{width:64px;height:64px}.service-content h3{font-size:1.3rem}.subtitle{font-size:.98rem;margin-bottom:22px}.benefits-list{gap:12px}.benefits-list li{font-size:.9rem}}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const wrapper = document.querySelector('.carousel-wrapper');
+  const track = document.querySelector('.carousel-track');
+  const slides = document.querySelectorAll('.carousel-slide');
+  if (!wrapper || !track || slides.length === 0) return;
+  
+  const totalSlides = slides.length;
+  let currentIndex = 2;
+  let isDragging = false;
+  let startX = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  
+  function getGap() {
+    return window.innerWidth > 768 ? 32 : 24;
+  }
+  
+  function getSlideOffset(index) {
+    const slideWidth = slides[0].offsetWidth;
+    const gap = getGap();
+    const centerOffset = wrapper.clientWidth / 2 - slideWidth / 2;
+    return centerOffset - (index * (slideWidth + gap));
+  }
+  
+  function updateSlides() {
+    slides.forEach((slide, index) => {
+      const distance = Math.abs(index - currentIndex);
+      let scale, opacity, blur, rotateY;
+      if (distance === 0) {
+        scale = 1.08;
+        opacity = 1;
+        blur = 0;
+        rotateY = 0;
+      } else if (distance === 1) {
+        scale = 0.88;
+        opacity = 0.85;
+        blur = 1.2;
+        const direction = index > currentIndex ? 1 : -1;
+        rotateY = direction * -6;
+      } else {
+        scale = 0.72;
+        opacity = 0.5;
+        blur = 3;
+        const direction = index > currentIndex ? 1 : -1;
+        rotateY = direction * -10;
+      }
+      slide.style.transform = `scale(${scale}) rotateY(${rotateY}deg)`;
+      slide.style.opacity = opacity;
+      slide.style.filter = `blur(${blur}px)`;
+    });
+  }
+  
+  function goToSlide(index) {
+    currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
+    const offset = getSlideOffset(currentIndex);
+    track.style.transform = `translateX(${offset}px)`;
+    prevTranslate = offset;
+    currentTranslate = offset;
+    updateSlides();
+  }
+  
+  function snapToNearest() {
+    const slideWidth = slides[0].offsetWidth;
+    const gap = getGap();
+    const slideStep = slideWidth + gap;
+    const movedBy = currentTranslate - prevTranslate;
+    if (Math.abs(movedBy) > slideStep / 4) {
+      if (movedBy < 0 && currentIndex < totalSlides - 1) currentIndex += 1;
+      else if (movedBy > 0 && currentIndex > 0) currentIndex -= 1;
+    }
+    goToSlide(currentIndex);
+  }
+  
+  function handleStart(e) {
+    isDragging = true;
+    startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    track.classList.add('no-transition');
+  }
+  
+  function handleMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    const diff = currentX - startX;
+    currentTranslate = prevTranslate + diff;
+    track.style.transform = `translateX(${currentTranslate}px)`;
+  }
+  
+  function handleEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    track.classList.remove('no-transition');
+    snapToNearest();
+  }
+  
+  track.addEventListener('mousedown', handleStart);
+  track.addEventListener('touchstart', handleStart, { passive: false });
+  document.addEventListener('mousemove', handleMove);
+  document.addEventListener('touchmove', handleMove, { passive: false });
+  document.addEventListener('mouseup', handleEnd);
+  document.addEventListener('touchend', handleEnd);
+  
+  goToSlide(2);
+  window.addEventListener('resize', () => goToSlide(currentIndex));
+});
+</script>
