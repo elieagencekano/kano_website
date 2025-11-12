@@ -6,7 +6,7 @@
 </div>
 
 <style>
-#liquid{position:fixed;inset:0;z-index:1;pointer-events:none;
+#liquid{position:fixed;top:-20vh;left:-10vw;right:-10vw;bottom:-20vh;z-index:1;pointer-events:none;
   background:
     radial-gradient(1200px 800px at 12% -10%, #0b1526 0%, #0b1526 40%, transparent 60%),
     radial-gradient(900px 700px at 88% 8%,  #132a46 0%, transparent 60%),
@@ -19,6 +19,7 @@
 .vignette{position:absolute;inset:0;background:
   radial-gradient(120% 95% at 50% 42%, rgba(0,0,0,0) 56%, rgba(0,0,0,.45) 100%)}
 @media (max-width:768px){
+  #liquid{top:-25vh;bottom:-25vh}
   #layer0{filter:blur(18px)}
   #layer1{filter:blur(15px)}
 }
@@ -35,8 +36,8 @@ const fpsTarget=isMobile?20:30;
 
 function resize(){
   PR=Math.min(devicePixelRatio||1,isMobile?1:1.5);
-  W=c0.width=c1.width=Math.floor(innerWidth*PR);
-  H=c0.height=c1.height=Math.floor(innerHeight*PR);
+  W=c0.width=c1.width=Math.floor(innerWidth*PR*1.2);
+  H=c0.height=c1.height=Math.floor(innerHeight*PR*1.5);
 }
 resize();
 let resizeTimeout;
