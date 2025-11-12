@@ -148,9 +148,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!viewport || !track || slides.length === 0) return;
 
   const totalSlides = slides.length;
-  const CARD_WIDTH = 440;
-  const GAP = 32;
-  const CARD_STEP = CARD_WIDTH + GAP;
+  let CARD_WIDTH = 440;
+  let GAP = 32;
+  
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const isTablet = window.matchMedia('(min-width: 769px) and (max-width: 1024px)').matches;
+  
+  if (isMobile) {
+    CARD_WIDTH = Math.min(340, window.innerWidth * 0.75);
+    GAP = 20;
+  } else if (isTablet) {
+    CARD_WIDTH = 380;
+    GAP = 28;
+  }
 
   let currentIndex = 2;
   let isDragging = false;
@@ -160,11 +170,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let dragDirection = null;
 
   const isTouch = 'ontouchstart' in window;
-  const isTablet = window.matchMedia('(min-width: 769px) and (max-width: 1024px)').matches;
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
   function getScaleForDistance(distance) {
     const abs = Math.abs(distance);
+    const nowMobile = window.matchMedia('(max-width: 768px)').matches;
+    
+    if (nowMobile) {
+      if (abs === 0) return 0.85;
+      if (abs === 1) return 0.55;
+      return 0.35;
+    }
+    
     if (abs === 0) return 1.06;
     if (abs === 1) return 0.90;
     if (abs === 2) return 0.78;
@@ -173,6 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getOpacityForDistance(distance) {
     const abs = Math.abs(distance);
+    const nowMobile = window.matchMedia('(max-width: 768px)').matches;
+    
+    if (nowMobile) {
+      if (abs === 0) return 1;
+      if (abs === 1) return 0.5;
+      return 0.2;
+    }
+    
     if (abs === 0) return 1;
     if (abs === 1) return 0.85;
     if (abs === 2) return 0.65;
@@ -181,6 +205,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getBlurForDistance(distance) {
     const abs = Math.abs(distance);
+    const nowMobile = window.matchMedia('(max-width: 768px)').matches;
+    
+    if (nowMobile) {
+      if (abs === 0) return 0;
+      if (abs === 1) return 3;
+      return 5;
+    }
+    
     if (abs === 0) return 0;
     if (abs === 1) return 1;
     if (abs === 2) return 2.5;
@@ -321,6 +353,20 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
+      const nowMobile = window.matchMedia('(max-width: 768px)').matches;
+      const nowTablet = window.matchMedia('(min-width: 769px) and (max-width: 1024px)').matches;
+      
+      if (nowMobile) {
+        CARD_WIDTH = Math.min(340, window.innerWidth * 0.75);
+        GAP = 20;
+      } else if (nowTablet) {
+        CARD_WIDTH = 380;
+        GAP = 28;
+      } else {
+        CARD_WIDTH = 440;
+        GAP = 32;
+      }
+      
       goToSlide(currentIndex, false);
     }, 100);
   });
