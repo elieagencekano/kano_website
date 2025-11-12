@@ -32,7 +32,6 @@ body {
   color: var(--kano-light);
   background: #0a0f16;
   overflow-x: hidden;
-  position: relative;
 }
 
 h1,
