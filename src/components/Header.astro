@@ -22,7 +22,9 @@ const toHref = (h) => {
       </svg>
     </button>
 
-    <a href={import.meta.env.BASE_URL} class="logo" aria-label="KANO">KANO</a>
+    <a href={import.meta.env.BASE_URL} class="logo" aria-label="KANO">
+      <img src="/logo-kano.svg" alt="KANO" class="logo-img" />
+    </a>
 
     <div class="desktop-wrap">
       <div class="desktop-nav" role="menu">
@@ -37,7 +39,6 @@ const toHref = (h) => {
 </div>
 
 <style>
-/* Wrapper plein écran qui centre, et ignore naturellement la scrollbar */
 #kano-nav{
   position: fixed;
   top: 18px;
@@ -48,10 +49,9 @@ const toHref = (h) => {
   place-items: center;
   font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: #fff;
-  pointer-events: none; /* pour laisser cliquer seulement la pilule */
+  pointer-events: none;
 }
 
-/* La pilule redevient interactive */
 .header-pill{
   pointer-events: auto;
   display:flex; align-items:center; position:relative;
@@ -65,10 +65,10 @@ const toHref = (h) => {
 
 .header-pill.expanded{ justify-content:flex-start; padding-left:22px; }
 .logo{
-  font-family:"Montserrat","Poppins",sans-serif; font-weight:800; letter-spacing:.5px;
-  color:var(--kano-gold); text-decoration:none; font-size:1.1rem;
+  display:flex; align-items:center; text-decoration:none;
   transition: margin .55s cubic-bezier(.22,.61,.36,1);
 }
+.logo-img{height:50px; width:auto; display:block}
 .header-pill.expanded .logo{ margin-right:18px; }
 .desktop-wrap{ width:0; overflow:hidden; margin-left:0;
   transition: width .55s cubic-bezier(.22,.61,.36,1), margin-left .55s cubic-bezier(.22,.61,.36,1); }
@@ -87,7 +87,6 @@ const toHref = (h) => {
 }
 .menu-toggle.active{ color:var(--kano-gold); }
 
-/* Dropdown centré sans translateX — il utilisera la largeur utile (scrollbar incluse) */
 .mobile-dropdown{
   position: fixed;
   top: 70px;
@@ -120,10 +119,13 @@ const toHref = (h) => {
   .menu-toggle{ display:flex; align-items:center; justify-content:center; }
   .desktop-wrap{ display:none; }
 }
+@media (min-width:421px) and (max-width:899px){
+  .logo-img{ height:60px; }
+}
 @media (max-width:420px){
   #kano-nav{ top:12px; }
   .header-pill{ height:40px; padding:10px 12px; }
-  .logo{ font-size:1rem; }
+  .logo-img{ height:36px; }
   .menu-toggle{ width:24px; height:24px; margin-right:6px; }
   .menu-toggle svg{ width:18px; height:18px; }
 }

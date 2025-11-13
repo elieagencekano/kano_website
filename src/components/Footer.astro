@@ -1,116 +1,92 @@
 ---
-const year = new Date().getFullYear();
+const currentYear = new Date().getFullYear();
+
+const links = {
+  main: [
+    { label: "Nos solutions", href: "#solutions" },
+    { label: "Notre ADN", href: "#adn" },
+    { label: "Contact", href: "#contact" }
+  ],
+  legal: [
+    { label: "Mentions légales", href: "#mentions" },
+    { label: "Politique de confidentialité", href: "#privacy" }
+  ]
+};
+
+const social = [
+  { name: "LinkedIn", href: "#", icon: `<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>` }
+];
 ---
 
-<footer class="footer" aria-label="Pied de page du site Kano">
-  <div class="footer-container">
-    <div class="footer-main glass-footer">
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-grid">
       <div class="footer-brand">
-        <span class="footer-logo">KANO</span>
-        <p class="footer-tagline">Sites web qui convertissent sans prise de tête.</p>
+        <img src="/logo-kano.svg" alt="KANO" class="brand-logo" />
+        <p class="brand-tagline">Votre partenaire digital à Angers</p>
+        <p class="brand-desc">Nous créons des sites qui attirent, convainquent et transforment.</p>
+        <div class="social-links">
+          {social.map(s => (
+            <a href={s.href} aria-label={s.name} class="social-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <Fragment set:html={s.icon} />
+              </svg>
+            </a>
+          ))}
+        </div>
       </div>
 
-      <nav class="footer-nav" aria-label="Navigation pied de page">
-        <a href="#solutions">Nos solutions</a>
-        <a href="#adn">Notre ADN</a>
-        <a href="#contact">Contact</a>
-        <a href="/mentions-legales">Pages légales</a>
-      </nav>
+      <div class="footer-links">
+        <div class="link-column">
+          <h4>Navigation</h4>
+          <ul>
+            {links.main.map(link => (
+              <li><a href={link.href}>{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
 
-      <div class="footer-contact">
-        <p class="footer-address">
-          25 rue Lenepveu<br />
-          49100 ANGERS
-        </p>
-        <a
-          href="https://www.linkedin.com"
-          class="footer-linkedin"
-          aria-label="KANO sur LinkedIn"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8.25H4.8V24H.24V8.25zM8.55 8.25h4.35v2.14h.06c.61-1.16 2.1-2.39 4.33-2.39 4.63 0 5.48 3.05 5.48 7.02V24h-4.56v-7.02c0-1.67-.03-3.82-2.33-3.82-2.33 0-2.69 1.82-2.69 3.7V24H8.55V8.25z"
-              fill="currentColor"
-            />
-          </svg>
-        </a>
+        <div class="link-column">
+          <h4>Légal</h4>
+          <ul>
+            {links.legal.map(link => (
+              <li><a href={link.href}>{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>© {year} KANO. Tous droits réservés.</p>
+      <p class="copyright">© {currentYear} KANO. Tous droits réservés.</p>
+      <p class="location">Angers, France 🇫🇷</p>
     </div>
   </div>
 </footer>
 
 <style>
-.footer{position:relative;padding:72px 0 32px;z-index:1}
-.footer-container{max-width:1380px;margin:0 auto;padding:0 32px}
-
-.glass-footer{
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border-radius:28px;
-  box-shadow:0 18px 60px rgba(0,0,0,.4);
-  padding:28px 32px;
-  display:grid;
-  grid-template-columns:1.2fr 1fr auto;
-  gap:32px;
-  align-items:flex-start;
-}
-
-.footer-brand{display:flex;flex-direction:column;gap:10px}
-.footer-logo{font-family:Montserrat,sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.2em;color:#fff;text-transform:uppercase}
-.footer-tagline{margin:0;color:var(--kano-light);opacity:.9;font-size:.95rem;line-height:1.5}
-
-.footer-nav{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:flex-start;justify-content:center}
-.footer-nav a{font-size:.96rem;color:var(--kano-light);text-decoration:none;position:relative;padding-bottom:2px}
-.footer-nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;border-radius:999px;background:var(--kano-gold);transition:width .25s cubic-bezier(.4,0,.2,1)}
-.footer-nav a:hover::after{width:100%}
-.footer-nav a:hover{color:#fff}
-
-.footer-contact{display:flex;flex-direction:column;gap:12px;align-items:flex-end;text-align:right}
-.footer-address{margin:0;color:var(--kano-light);font-size:.92rem;line-height:1.5}
-.footer-linkedin{width:40px;height:40px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:rgba(212,175,55,.16);border:1px solid rgba(212,175,55,.6);color:var(--kano-gold);transition:transform .25s,box-shadow .25s,background .25s}
-.footer-linkedin:hover{transform:translateY(-2px);background:var(--kano-gold);color:var(--kano-ink);box-shadow:0 10px 28px rgba(212,175,55,.45)}
-
-.footer-bottom{margin-top:20px;text-align:center}
-.footer-bottom p{margin:0;font-size:.85rem;color:var(--kano-light);opacity:.75}
-
-@media (max-width:1024px){
-  .footer-container{padding:0 24px}
-  .glass-footer{
-    grid-template-columns:1fr 1fr;
-    gap:24px;
-    padding:24px 24px;
-  }
-  .footer-contact{align-items:flex-start;text-align:left}
-}
-
+.footer{position:relative;padding:80px 0 40px;background:linear-gradient(180deg,transparent 0%,rgba(10,15,22,.5) 100%);border-top:1px solid rgba(255,255,255,.08);z-index:1}
+.footer-content{max-width:1380px;margin:0 auto;padding:0 32px}
+.footer-grid{display:grid;grid-template-columns:1.2fr 2fr;gap:80px;margin-bottom:60px;align-items:start}
+.footer-brand{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.brand-logo{height:100px;width:auto;margin-bottom:0;display:block;margin-left:-8px;margin-top:-35px}
+.brand-tagline{font-size:1.1rem;font-weight:600;color:var(--kano-light);margin:0;opacity:.9}
+.brand-desc{font-size:.95rem;color:var(--kano-light);opacity:.7;line-height:1.6;margin:0;max-width:320px}
+.social-links{display:flex;gap:12px;margin-top:8px}
+.social-link{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:var(--kano-light);transition:all .3s cubic-bezier(.4,0,.2,1)}
+.social-link:hover{background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.3);color:var(--kano-gold);transform:translateY(-2px)}
+.footer-links{display:grid;grid-template-columns:repeat(2,1fr);gap:40px}
+.link-column h4{font-family:Montserrat,sans-serif;font-size:.9rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0 0 20px}
+.link-column ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.link-column a{color:var(--kano-light);font-size:.95rem;text-decoration:none;opacity:.8;transition:all .25s}
+.link-column a:hover{color:var(--kano-gold);opacity:1;padding-left:4px}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:40px;border-top:1px solid rgba(255,255,255,.08)}
+.copyright,.location{font-size:.9rem;color:var(--kano-light);opacity:.6;margin:0}
 @media (max-width:768px){
-  .footer{padding:56px 0 28px}
-  .footer-container{padding:0 20px}
-  .glass-footer{
-    grid-template-columns:1fr;
-    gap:20px;
-    padding:22px 20px;
-  }
-  .footer-brand,.footer-contact{text-align:center;align-items:center}
-  .footer-nav{justify-content:center}
-}
-
-@media (max-width:480px){
-  .footer-nav{gap:10px 18px}
-  .footer-logo{font-size:1.25rem}
-  .footer-tagline{font-size:.9rem}
+  .footer{padding:60px 0 30px}
+  .footer-content{padding:0 20px}
+  .footer-grid{grid-template-columns:1fr;gap:40px;margin-bottom:40px}
+  .footer-links{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center;padding-top:30px}
 }
 </style>
