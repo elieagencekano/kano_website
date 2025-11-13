@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Astro to Pages
 
 on:
   push:
@@ -16,12 +16,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -32,17 +31,15 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Nouvelle version correcte (OUBLIE @v2)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-
+    needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
