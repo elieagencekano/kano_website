@@ -4,11 +4,32 @@ import Hero from "../components/Hero.astro";
 import Services from "../components/Services.astro";
 import Pricing from "../components/Pricing.astro";
 import ProjectCarousel from "../components/ProjectCarousel.astro";
+
+const projects = [
+  {
+    id: "1",
+    name: "Domaine Didier Delaunay",
+    description: "Création d'un site web pour un domaine viticole en Anjou",
+    url: "https://didier-delaunay.fr/"
+  },
+  {
+    id: "2",
+    name: "Actiba Menuiseries",
+    description: "Réalisation d'un site vitrine pour une menuiserie vendéenne",
+    url: "https://actiba-menuiseries.fr/"
+  },
+  {
+    id: "3",
+    name: "Pro2mat",
+    description: "Refonte d'un site vitrine de vente de matériel de levage optimisé pour la conversion",
+    url: "https://pro2mat.fr/"
+  }
+];
 ---
 
 <Layout title="KANO – Agence marketing à Angers" description="Création de sites internet, SEO & publicité digitale pour les entreprises locales.">
   <Hero />
   <Services />
   <Pricing />
-  <ProjectCarousel />
+  <ProjectCarousel projects={projects} />
 </Layout>
