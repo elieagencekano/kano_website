@@ -134,9 +134,12 @@ const getIcon = (type: string) => {
   .service-card{padding:28px 24px}
   .icon-wrapper{width:64px;height:64px}
   .service-content h3{font-size:1.3rem}
+  .carousel-slide[aria-selected="true"] .service-content h3{font-size:1.45rem}
   .subtitle{font-size:.98rem;margin-bottom:22px}
+  .carousel-slide[aria-selected="true"] .subtitle{font-size:1.05rem}
   .benefits-list{gap:12px}
   .benefits-list li{font-size:.9rem}
+  .carousel-slide[aria-selected="true"] .benefits-list li{font-size:.95rem}
 }
 </style>
 
@@ -323,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
       isDragging = false;
 
       if (dragDirection === 'horizontal') {
-        const threshold = CARD_WIDTH / 3;
+        const threshold = CARD_WIDTH / 4;
         
         if (currentX < -threshold && currentIndex < totalSlides - 1) {
           goToSlide(currentIndex + 1);
