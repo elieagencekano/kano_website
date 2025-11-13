@@ -3,22 +3,21 @@ interface Project {
   id: string;
   name: string;
   description: string;
-  url: string;
+  video: string;
 }
 
 interface Props {
-  projects: Project[];
+  projects?: Project[];
 }
 
-const { projects = [] } = Astro.props as Props;
-const list = (projects && projects.length)
+const { projects } = Astro.props as Props;
+const list = projects && projects.length
   ? projects
-  : Array.from({ length: 3 }).map((_, i) => ({
-      id: String(i + 1),
-      name: `Projet ${i + 1}`,
-      description: `Aperçu en direct`,
-      url: ""
-    }));
+  : [
+      { id: "1", name: "Domaine Didier Delaunay", description: "Site vitrine viticole", video: "Delaunay-Home.mp4" },
+      { id: "2", name: "Actiba Menuiseries", description: "Site e-commerce menuiserie", video: "Actiba-Home.mp4" },
+      { id: "3", name: "Pro2mat", description: "Site vitrine industriel", video: "Home-Pro2mat.mp4" }
+    ];
 ---
 
 <section class="projects-carousel" aria-label="Réalisations">
@@ -31,8 +30,8 @@ const list = (projects && projects.length)
     <div class="carousel-wrapper">
       <div class="carousel-container">
         <div class="projects-slider">
-          {list.map((project) => (
-            <div class="carousel-item" data-id={project.id}>
+          {list.map((project, idx) => (
+            <div class="carousel-item" data-id={project.id} data-index={idx}>
               <div class="project-card glass">
                 <div class="window-header">
                   <div class="window-buttons">
@@ -43,14 +42,14 @@ const list = (projects && projects.length)
                   <span class="window-url">{project.name}</span>
                 </div>
                 <div class="window-frame">
-                  <iframe
-                    src={project.url || "about:blank"}
-                    srcdoc={project.url ? undefined : '<!doctype html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><style>html,body{margin:0;height:100%;background:linear-gradient(180deg,#0a0f16,#101a26);display:grid;place-items:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif} .chip{padding:.5rem .75rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);color:#cbd5e1;font-size:14px;letter-spacing:.2px} .dot{display:inline-block;width:.5rem;height:.5rem;border-radius:999px;margin-right:.5rem;background:#22c55e;vertical-align:baseline;animation:pulse 1.2s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}</style></head><body><div class="chip"><span class="dot"></span>Aperçu prêt</div></body></html>'}
-                    title={project.name}
-                    loading="eager"
-                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-pointer-lock allow-modals"
-                    referrerpolicy="no-referrer"
-                  ></iframe>
+                  <video
+                    class="project-video"
+                    data-src={`/${project.video}`}
+                    loop
+                    muted
+                    playsinline
+                    preload="none"
+                  ></video>
                 </div>
               </div>
               <div class="project-details">
@@ -87,7 +86,7 @@ const list = (projects && projects.length)
   .container-projects { max-width: 1280px; margin: 0 auto; padding: 0 32px; overflow: visible; position: relative; z-index: 200; }
   .header-projects { text-align: center; max-width: 700px; margin: 0 auto 80px; animation: fadeUp 700ms ease-out; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  .header-projects h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin: 0 0 16px; background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.85) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .header-projects h2 { font-size: clamp(2rem, 3.5vw, 3rem); margin: 0 0 16px; background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.85) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: Montserrat, sans-serif; }
   .intro-projects { font-size: 1.15rem; color: var(--kano-light); opacity: 0.88; line-height: 1.6; margin: 0; }
 
   .glass { background: rgba(255, 255, 255, 0.06); border: none; backdrop-filter: blur(12px) saturate(120%); -webkit-backdrop-filter: blur(12px) saturate(120%); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); }
@@ -97,14 +96,14 @@ const list = (projects && projects.length)
 
   .carousel-container { position: relative; width: 100%; min-height: 500px; overflow: visible; }
 
-  .projects-slider { position: relative; height: 620px; overflow: visible; }
+  .projects-slider { position: relative; height: 560px; overflow: visible; }
 
   .carousel-item { position: absolute; top: 0; left: 50%; width: min(70vw, 900px); transform: translateX(-50%); display: flex; flex-direction: column; gap: 20px; transition: transform .7s cubic-bezier(.22,.61,.36,1), filter .7s cubic-bezier(.22,.61,.36,1), opacity .7s cubic-bezier(.22,.61,.36,1); will-change: transform, filter, opacity; z-index: 10; }
   .carousel-item.is-active { transform: translateX(-50%) scale(1); filter: none; opacity: 1; z-index: 100; }
   .carousel-item.is-right { --gap: 96px; --idx: 1; transform: translateX(calc(-50% + var(--idx) * var(--gap))) scale(calc(1 - var(--idx) * 0.08)); filter: blur(calc(2px + (var(--idx) - 1) * 1px)); opacity: calc(0.9 - var(--idx) * 0.12); z-index: calc(99 - var(--idx)); pointer-events: none; }
   .carousel-item.is-left { transform: translateX(calc(-50% - 40vw)) scale(0.9); opacity: 0; filter: blur(6px); z-index: 1; pointer-events: none; }
 
-  .project-card { width: 100%; height: 550px; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; background: rgba(15, 20, 25, 0.95); position: relative; }
+  .project-card { width: 100%; aspect-ratio: 1901 / 943; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; background: rgba(15, 20, 25, 0.95); position: relative; }
 
   .window-header { height: 36px; position: relative; z-index: 20; background: rgba(8,12,18,0.28); backdrop-filter: saturate(120%) blur(14px); -webkit-backdrop-filter: saturate(120%) blur(14px); display: flex; align-items: center; justify-content: center; gap: 12px; padding: 0 14px; flex-shrink: 0; overflow: visible; }
   .window-header::after { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 45%, rgba(0,0,0,0.2) 100%); pointer-events: none; }
@@ -116,11 +115,8 @@ const list = (projects && projects.length)
   .window-url { position: relative; z-index: 1; font-family: Poppins, sans-serif; font-size: 12px; color: rgba(255, 255, 255, 0.7); text-align: center; }
 
   .window-frame { flex: 1; position: relative; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); overflow: hidden; }
-  .window-frame::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 120% at 0% 0%, rgba(255,255,255,0.06) 0%, transparent 50%), radial-gradient(120% 120% at 100% 100%, rgba(255,255,255,0.04) 0%, transparent 50%); pointer-events: none; opacity: 1; transition: opacity .2s ease; }
-  .window-frame.is-loaded::after { opacity: 0; }
-  .window-frame.is-failed::before { content: "Aperçu indisponible"; position: absolute; inset: auto 12px 12px 12px; display: inline-block; padding: .5rem .75rem; font-size: 12px; color: #cbd5e1; background: rgba(10, 15, 20, 0.6); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; backdrop-filter: blur(8px); }
 
-  .window-frame iframe { position: absolute; top: 0; left: 0; width: 133.334%; height: 133.334%; border: none; display: block; transform: scale(0.75); transform-origin: 0 0; }
+  .project-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .project-details { display: flex; flex-direction: column; gap: 8px; }
   .project-name { font-size: 1.1rem; font-weight: 800; color: #fff; margin: 0; font-family: Montserrat, sans-serif; }
@@ -137,24 +133,47 @@ const list = (projects && projects.length)
 
   @media (max-width: 1024px) {
     .carousel-item { width: min(80vw, 720px); }
-    .project-card { height: 480px; }
+    .projects-slider { height: 480px; }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 768px) and (min-width: 481px) {
     .projects-carousel { padding: 80px 0; }
     .container-projects { padding: 0 20px; }
     .header-projects { margin-bottom: 60px; }
-    .projects-slider { height: 640px; }
-    .carousel-item { width: calc(100vw - 40px); }
-    .project-card { height: 620px; aspect-ratio: 9 / 16; border-radius: 16px; }
-    .window-frame iframe { width: 153.847%; height: 153.847%; transform: scale(0.65); }
-    .carousel-btn { width: 36px; height: 36px; }
-    .carousel-btn.prev { left: 8px; }
-    .carousel-btn.next { right: 8px; }
+    .projects-slider { height: 360px; }
+    .carousel-item { width: calc(100vw - 40px); gap: 12px; }
+    .project-card { aspect-ratio: 16 / 10; border-radius: 16px; }
+    .project-video { object-fit: contain; }
+    .carousel-btn { width: 36px; height: 36px; top: 160px; transform: translateY(-50%); }
+    .carousel-btn.prev { left: 6px; }
+    .carousel-btn.next { right: 6px; }
     .project-name { font-size: 1rem; }
     .project-desc { font-size: 0.85rem; }
-    .carousel-dots { gap: 6px; margin-top: 80px; }
+    .carousel-dots { gap: 6px; margin-top: 6px; }
     .dot { width: 8px; height: 8px; }
+  }
+
+  @media (max-width: 480px) {
+    .projects-carousel { padding: 80px 0; }
+    .container-parcours { padding: 0 20px; }
+    .header-projects { margin-bottom: 60px; }
+    .projects-slider { height: 320px; }
+    .carousel-item { width: calc(100vw - 40px); gap: 12px; }
+    .project-card { aspect-ratio: 16 / 10; border-radius: 16px; }
+    .project-video { object-fit: contain; }
+    .carousel-btn { width: 36px; height: 36px; top: 140px; transform: translateY(-50%); }
+    .carousel-btn.prev { left: 6px; }
+    .carousel-btn.next { right: 6px; }
+    .project-name { font-size: 1rem; }
+    .project-desc { font-size: 0.85rem; }
+    .carousel-dots { gap: 6px; margin-top: 2px; }
+    .dot { width: 8px; height: 8px; }
+  }
+    .dot { width: 8px; height: 8px; }
+    .project-name { font-size: 1rem; }
+    .project-desc { font-size: 0.85rem; }
   }
 </style>
 
@@ -168,6 +187,33 @@ const list = (projects && projects.length)
     if (!slider || !items.length) return;
 
     let currentIndex = 0;
+    const loadedVideos = new Set();
+
+    function loadVideo(index) {
+      if (loadedVideos.has(index)) return;
+      const item = items[index];
+      if (!item) return;
+      const video = item.querySelector('.project-video');
+      if (!video || !video.dataset.src) return;
+      console.log('Loading video:', video.dataset.src);
+      video.src = video.dataset.src;
+      video.load();
+      loadedVideos.add(index);
+      video.addEventListener('loadeddata', () => console.log('Video loaded:', video.dataset.src));
+      video.addEventListener('error', (e) => console.error('Video error:', video.dataset.src, e));
+    }
+
+    function playActiveVideo() {
+      items.forEach((item, idx) => {
+        const video = item.querySelector('.project-video');
+        if (!video) return;
+        if (idx === currentIndex && item.classList.contains('is-active')) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }
 
     function applyPositions() {
       items.forEach((item, idx) => {
@@ -183,6 +229,11 @@ const list = (projects && projects.length)
         }
       });
       dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+      
+      loadVideo(currentIndex);
+      if (currentIndex + 1 < items.length) loadVideo(currentIndex + 1);
+      
+      setTimeout(playActiveVideo, 100);
     }
 
     function next() { currentIndex = Math.min(currentIndex + 1, items.length - 1); applyPositions(); }
@@ -198,14 +249,6 @@ const list = (projects && projects.length)
     slider.addEventListener('pointercancel', () => { tracking = false; });
 
     applyPositions();
-
-    document.querySelectorAll('.window-frame').forEach((frame) => {
-      const iframe = frame.querySelector('iframe');
-      if (!iframe) return;
-      const markLoaded = () => frame.classList.add('is-loaded');
-      iframe.addEventListener('load', markLoaded, { once: true });
-      setTimeout(() => { if (!frame.classList.contains('is-loaded')) frame.classList.add('is-failed'); }, 1500);
-    });
   }
 
   if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCarousel); } else { initCarousel(); }
