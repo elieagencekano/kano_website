@@ -11,6 +11,6 @@
   },
   "dependencies": {
     "astro": "^5.15.4",
-    "@astrojs/static": "^4.0.0"
+    "@astrojs/static": "^3.0.0"
   }
 }
