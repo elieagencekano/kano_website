@@ -1,0 +1,116 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer" aria-label="Pied de page du site Kano">
+  <div class="footer-container">
+    <div class="footer-main glass-footer">
+      <div class="footer-brand">
+        <span class="footer-logo">KANO</span>
+        <p class="footer-tagline">Sites web qui convertissent sans prise de tête.</p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Navigation pied de page">
+        <a href="#solutions">Nos solutions</a>
+        <a href="#adn">Notre ADN</a>
+        <a href="#contact">Contact</a>
+        <a href="/mentions-legales">Pages légales</a>
+      </nav>
+
+      <div class="footer-contact">
+        <p class="footer-address">
+          25 rue Lenepveu<br />
+          49100 ANGERS
+        </p>
+        <a
+          href="https://www.linkedin.com"
+          class="footer-linkedin"
+          aria-label="KANO sur LinkedIn"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8.25H4.8V24H.24V8.25zM8.55 8.25h4.35v2.14h.06c.61-1.16 2.1-2.39 4.33-2.39 4.63 0 5.48 3.05 5.48 7.02V24h-4.56v-7.02c0-1.67-.03-3.82-2.33-3.82-2.33 0-2.69 1.82-2.69 3.7V24H8.55V8.25z"
+              fill="currentColor"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {year} KANO. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer{position:relative;padding:72px 0 32px;z-index:1}
+.footer-container{max-width:1380px;margin:0 auto;padding:0 32px}
+
+.glass-footer{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-radius:28px;
+  box-shadow:0 18px 60px rgba(0,0,0,.4);
+  padding:28px 32px;
+  display:grid;
+  grid-template-columns:1.2fr 1fr auto;
+  gap:32px;
+  align-items:flex-start;
+}
+
+.footer-brand{display:flex;flex-direction:column;gap:10px}
+.footer-logo{font-family:Montserrat,sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.2em;color:#fff;text-transform:uppercase}
+.footer-tagline{margin:0;color:var(--kano-light);opacity:.9;font-size:.95rem;line-height:1.5}
+
+.footer-nav{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:flex-start;justify-content:center}
+.footer-nav a{font-size:.96rem;color:var(--kano-light);text-decoration:none;position:relative;padding-bottom:2px}
+.footer-nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;border-radius:999px;background:var(--kano-gold);transition:width .25s cubic-bezier(.4,0,.2,1)}
+.footer-nav a:hover::after{width:100%}
+.footer-nav a:hover{color:#fff}
+
+.footer-contact{display:flex;flex-direction:column;gap:12px;align-items:flex-end;text-align:right}
+.footer-address{margin:0;color:var(--kano-light);font-size:.92rem;line-height:1.5}
+.footer-linkedin{width:40px;height:40px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:rgba(212,175,55,.16);border:1px solid rgba(212,175,55,.6);color:var(--kano-gold);transition:transform .25s,box-shadow .25s,background .25s}
+.footer-linkedin:hover{transform:translateY(-2px);background:var(--kano-gold);color:var(--kano-ink);box-shadow:0 10px 28px rgba(212,175,55,.45)}
+
+.footer-bottom{margin-top:20px;text-align:center}
+.footer-bottom p{margin:0;font-size:.85rem;color:var(--kano-light);opacity:.75}
+
+@media (max-width:1024px){
+  .footer-container{padding:0 24px}
+  .glass-footer{
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    padding:24px 24px;
+  }
+  .footer-contact{align-items:flex-start;text-align:left}
+}
+
+@media (max-width:768px){
+  .footer{padding:56px 0 28px}
+  .footer-container{padding:0 20px}
+  .glass-footer{
+    grid-template-columns:1fr;
+    gap:20px;
+    padding:22px 20px;
+  }
+  .footer-brand,.footer-contact{text-align:center;align-items:center}
+  .footer-nav{justify-content:center}
+}
+
+@media (max-width:480px){
+  .footer-nav{gap:10px 18px}
+  .footer-logo{font-size:1.25rem}
+  .footer-tagline{font-size:.9rem}
+}
+</style>
