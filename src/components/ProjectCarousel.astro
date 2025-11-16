@@ -19,6 +19,8 @@ const list = (projects && projects.length)
       description: `Aperçu en direct`,
       url: ""
     }));
+
+const placeholderSrcdoc = '<!doctype html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><style>html,body{margin:0;height:100%;background:linear-gradient(180deg,#0a0f16,#101a26);display:grid;place-items:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif} .chip{padding:.5rem .75rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);color:#cbd5e1;font-size:14px;letter-spacing:.2px} .dot{display:inline-block;width:.5rem;height:.5rem;border-radius:999px;margin-right:.5rem;background:#22c55e;vertical-align:baseline;animation:pulse 1.2s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}</style></head><body><div class="chip"><span class="dot"></span>Aperçu prêt</div></body></html>';
 ---
 
 <section class="projects-carousel" aria-label="Réalisations">
@@ -43,14 +45,21 @@ const list = (projects && projects.length)
                   <span class="window-url">{project.name}</span>
                 </div>
                 <div class="window-frame">
-                  <iframe
-                    data-src={project.url || "about:blank"}
-                    data-srcdoc={project.url ? undefined : '<!doctype html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><style>html,body{margin:0;height:100%;background:linear-gradient(180deg,#0a0f16,#101a26);display:grid;place-items:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif} .chip{padding:.5rem .75rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);color:#cbd5e1;font-size:14px;letter-spacing:.2px} .dot{display:inline-block;width:.5rem;height:.5rem;border-radius:999px;margin-right:.5rem;background:#22c55e;vertical-align:baseline;animation:pulse 1.2s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}</style></head><body><div class="chip"><span class="dot"></span>Aperçu prêt</div></body></html>'}
-                    title={project.name}
-                    loading={idx === 0 ? "eager" : "lazy"}
-                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-pointer-lock allow-modals"
-                    referrerpolicy="no-referrer"
-                  ></iframe>
+                  {project.url ? (
+                    <iframe
+                      data-src={project.url}
+                      title={project.name}
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-pointer-lock allow-modals"
+                      referrerpolicy="no-referrer"
+                    ></iframe>
+                  ) : (
+                    <iframe
+                      srcdoc={placeholderSrcdoc}
+                      title={project.name}
+                      loading="eager"
+                    ></iframe>
+                  )}
                 </div>
               </div>
               <div class="project-details">
@@ -118,7 +127,7 @@ const list = (projects && projects.length)
   .window-frame { flex: 1; position: relative; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); overflow: hidden; }
   .window-frame::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 120% at 0% 0%, rgba(255,255,255,0.06) 0%, transparent 50%), radial-gradient(120% 120% at 100% 100%, rgba(255,255,255,0.04) 0%, transparent 50%); pointer-events: none; opacity: 1; transition: opacity .2s ease; }
   .window-frame.is-loaded::after { opacity: 0; }
-  .window-frame.is-failed::before { content: "Aperçu indisponible"; position: absolute; inset: auto 12px 12px 12px; display: inline-block; padding: .5rem .75rem; font-size: 12px; color: #cbd5e1; background: rgba(10, 15, 20, 0.6); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; backdrop-filter: blur(8px); }
+  .window-frame.is-failed::before { content: "Aperçu indisponible"; position: absolute; inset: auto 12px 12px 12px; display: inline-block; padding: .5rem .75rem; font-size: 12px; color: #cbd5e1; background: rgba(10, 15, 20, 0.6); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; backdrop-filter: blur(8px); z-index: 10; }
 
   .window-frame iframe { position: absolute; top: 0; left: 0; width: 133.334%; height: 133.334%; border: none; display: block; transform: scale(0.75); transform-origin: 0 0; }
 
@@ -176,18 +185,25 @@ const list = (projects && projects.length)
       if (!iframe || loadedIframes.has(iframe)) return;
 
       const src = iframe.getAttribute('data-src');
-      const srcdoc = iframe.getAttribute('data-srcdoc');
+      if (!src) {
+        frame?.classList.add('is-loaded');
+        return;
+      }
 
-      if (src) iframe.setAttribute('src', src);
-      if (srcdoc) iframe.setAttribute('srcdoc', srcdoc);
-
+      iframe.setAttribute('src', src);
       loadedIframes.add(iframe);
 
       const markLoaded = () => frame?.classList.add('is-loaded');
+      const markFailed = () => {
+        if (!frame?.classList.contains('is-loaded')) {
+          frame?.classList.add('is-failed');
+        }
+      };
+
       iframe.addEventListener('load', markLoaded, { once: true });
-      setTimeout(() => { 
-        if (!frame?.classList.contains('is-loaded')) frame?.classList.add('is-failed'); 
-      }, 1500);
+      iframe.addEventListener('error', markFailed, { once: true });
+      
+      setTimeout(markFailed, 3000);
     }
 
     function applyPositions() {
