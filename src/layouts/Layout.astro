@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Intro from "../components//Intro.astro";
 import Header from "../components/Header.astro";
 import BackgroundLiquid from "../components/BackgroundLiquid.astro";
+import Footer from "../components/Footer.astro";
 
 const { title = "KANO", description = "" } = Astro.props;
 ---
@@ -70,7 +71,8 @@ const { title = "KANO", description = "" } = Astro.props;
     <Header />
     <BackgroundLiquid />
     <slot />
-
+    <Footer />
+    
     <script>
       (function(){
         function setNudge(){
