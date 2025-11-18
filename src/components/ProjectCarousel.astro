@@ -49,13 +49,15 @@ const placeholderSrcdoc = '<!doctype html><html lang="fr"><head><meta charset="u
                     <iframe
                       data-src={project.url}
                       title={project.name}
-                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-pointer-lock allow-modals"
+                      sandbox="allow-same-origin allow-scripts allow-forms"
                       referrerpolicy="no-referrer"
+                      loading="lazy"
                     ></iframe>
                   ) : (
                     <iframe
                       srcdoc={placeholderSrcdoc}
                       title={project.name}
+                      loading="lazy"
                     ></iframe>
                   )}
                 </div>
@@ -154,7 +156,7 @@ const placeholderSrcdoc = '<!doctype html><html lang="fr"><head><meta charset="u
     .projects-slider { height: 640px; }
     .carousel-item { width: calc(100vw - 40px); }
     .project-card { height: 620px; aspect-ratio: 9 / 16; border-radius: 16px; }
-    .window-frame iframe { width: 153.847%; height: 153.847%; transform: scale(0.65); }
+    .window-frame iframe { width: 142.857%; height: 142.857%; transform: scale(0.70); }
     .carousel-btn { width: 36px; height: 36px; }
     .carousel-btn.prev { left: 8px; }
     .carousel-btn.next { right: 8px; }
@@ -185,6 +187,23 @@ const placeholderSrcdoc = '<!doctype html><html lang="fr"><head><meta charset="u
       if (timeout) {
         clearTimeout(timeout);
         loadingTimeouts.delete(iframe);
+      }
+    }
+
+    function unloadIframe(item) {
+      const iframe = item.querySelector('iframe');
+      const frame = item.querySelector('.window-frame');
+      if (!iframe || !frame) return;
+
+      const src = iframe.getAttribute('src');
+      const dataSrc = iframe.getAttribute('data-src');
+
+      if (src && dataSrc) {
+        iframe.removeAttribute('src');
+        frame.classList.remove('is-loaded', 'is-failed');
+        cleanupIframeLoad(iframe);
+        loadedIframes.delete(iframe);
+        failedIframes.delete(iframe);
       }
     }
 
@@ -226,11 +245,10 @@ const placeholderSrcdoc = '<!doctype html><html lang="fr"><head><meta charset="u
         iframe.addEventListener('load', markLoaded, { once: true });
         iframe.addEventListener('error', markFailed, { once: true });
 
-        const timeout = setTimeout(markFailed, 5000);
+        const timeout = setTimeout(markFailed, 8000);
         loadingTimeouts.set(iframe, timeout);
 
       } catch (error) {
-        console.error('Erreur chargement iframe:', error);
         frame.classList.add('is-failed');
         failedIframes.add(iframe);
       }
@@ -248,13 +266,16 @@ const placeholderSrcdoc = '<!doctype html><html lang="fr"><head><meta charset="u
             item.classList.add('is-active');
             setTimeout(() => {
               loadIframe(item);
-              if (items[idx + 1]) loadIframe(items[idx + 1]);
             }, 100);
-          } else if (offset > 0) {
-            item.classList.add('is-right');
-            item.style.setProperty('--idx', String(Math.min(offset, 3)));
           } else {
-            item.classList.add('is-left');
+            unloadIframe(item);
+
+            if (offset > 0) {
+              item.classList.add('is-right');
+              item.style.setProperty('--idx', String(Math.min(offset, 3)));
+            } else {
+              item.classList.add('is-left');
+            }
           }
         });
         
@@ -267,21 +288,21 @@ const placeholderSrcdoc = '<!doctype html><html lang="fr"><head><meta charset="u
     }
 
     function next() {
-      if (isTransitioning) return;
+      if (isTransitioning || currentIndex >= items.length - 1) return;
       isTransitioning = true;
-      currentIndex = Math.min(currentIndex + 1, items.length - 1);
+      currentIndex = currentIndex + 1;
       applyPositions();
     }
 
     function prev() {
-      if (isTransitioning) return;
+      if (isTransitioning || currentIndex <= 0) return;
       isTransitioning = true;
-      currentIndex = Math.max(currentIndex - 1, 0);
+      currentIndex = currentIndex - 1;
       applyPositions();
     }
 
     function goTo(index) {
-      if (isTransitioning || index === currentIndex) return;
+      if (isTransitioning || index === currentIndex || index < 0 || index >= items.length) return;
       isTransitioning = true;
       currentIndex = index;
       applyPositions();
