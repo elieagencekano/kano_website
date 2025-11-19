@@ -1,0 +1,109 @@
+---
+const team = [
+  {
+    name: "Élie",
+    role: "Technique",
+    quote: "Je m'occupe de la partie technique. Mon rôle, c'est de construire des systèmes solides, performants et propres. Architecture, optimisation, sécurité, stabilité : je veux que tout fonctionne vite, bien, et longtemps.",
+    icon: `<path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/>`
+  },
+  {
+    name: "Arthur",
+    role: "Stratégie",
+    quote: "Je suis bâtisseur de stratégie. Mon travail, c'est d'analyser, de structurer et de définir l'orientation la plus juste pour chaque projet. Positionnement, messages clés, logique d'ensemble : j'aime transformer une idée en un plan clair.",
+    icon: `<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>`
+  }
+];
+---
+
+<section class="equipe" aria-label="L'équipe">
+  <div class="container">
+    <header class="header-equipe">
+      <h2>Deux personnes, un même cap</h2>
+      <p>Ces deux approches sont différentes, et c'est justement ce contraste qui donne à KANO son équilibre.</p>
+    </header>
+
+    <div class="team-grid">
+      {team.map((member, index) => (
+        <div class="member-card glass" style={`--delay: ${index * 150}ms`}>
+          <div class="member-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <Fragment set:html={member.icon} />
+            </svg>
+          </div>
+          <div class="member-info">
+            <h3>{member.name}</h3>
+            <span class="member-role">{member.role}</span>
+          </div>
+          <blockquote class="member-quote">
+            <p>"{member.quote}"</p>
+          </blockquote>
+        </div>
+      ))}
+    </div>
+
+    <div class="team-conclusion">
+      <p>Lorsque la technique et la stratégie avancent ensemble, on ne crée pas seulement un outil qui fonctionne : on crée une solution qui a du sens.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+.equipe{position:relative;padding:100px 0;overflow:hidden}
+.container{max-width:1000px;margin:0 auto;padding:0 32px}
+.header-equipe{text-align:center;margin-bottom:60px;opacity:0;transform:translateY(40px)}
+.header-equipe.visible{animation:fadeUp 800ms cubic-bezier(.16,1,.3,1) forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.header-equipe h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-family:Montserrat,sans-serif;font-weight:900;margin:0 0 16px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;padding-bottom:4px}
+.header-equipe p{font-size:1.1rem;color:var(--kano-light);opacity:.8;line-height:1.6;margin:0;max-width:600px;margin-left:auto;margin-right:auto}
+.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-bottom:48px}
+.member-card{padding:36px 32px;border-radius:20px;opacity:0;transform:translateY(30px);transition:all .3s cubic-bezier(.34,.46,.35,1)}
+.member-card.visible{animation:cardIn 800ms cubic-bezier(.16,1,.3,1) var(--delay) forwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.glass{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.member-card:hover{transform:translateY(-6px);background:rgba(255,255,255,.06);border-color:rgba(212,175,55,.2);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.member-icon{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(212,175,55,.05));border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;color:var(--kano-gold);margin-bottom:20px;transition:all .3s cubic-bezier(.34,.46,.35,1)}
+.member-icon svg{transition:transform .3s cubic-bezier(.34,.46,.35,1)}
+.member-card:hover .member-icon{background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(212,175,55,.1));border-color:rgba(212,175,55,.4);box-shadow:0 8px 24px rgba(212,175,55,.2)}
+.member-card:hover .member-icon svg{transform:scale(1.15) rotate(8deg)}
+.member-info{margin-bottom:16px}
+.member-info h3{font-size:1.4rem;font-family:Montserrat,sans-serif;font-weight:900;color:#fff;margin:0 0 4px}
+.member-role{font-size:.9rem;color:var(--kano-gold);font-weight:600}
+.member-quote{margin:0;padding:0;border:none}
+.member-quote p{font-size:.95rem;color:var(--kano-light);opacity:.85;line-height:1.7;margin:0;font-style:italic}
+.team-conclusion{text-align:center;opacity:0;transform:translateY(30px)}
+.team-conclusion.visible{animation:fadeUp 800ms cubic-bezier(.16,1,.3,1) 300ms forwards}
+.team-conclusion p{font-size:1.15rem;color:var(--kano-light);opacity:.9;line-height:1.7;margin:0;max-width:700px;margin-left:auto;margin-right:auto;font-weight:500}
+@media (max-width:768px){.equipe{padding:80px 0}.container{padding:0 20px}.header-equipe{margin-bottom:48px}.team-grid{grid-template-columns:1fr;gap:20px}.member-card{padding:28px 24px}}
+@media (max-width:480px){.equipe{padding:60px 0}.member-card{padding:24px 20px}.member-info h3{font-size:1.2rem}.member-quote p{font-size:.9rem}}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const elements = document.querySelectorAll('.header-equipe, .member-card, .team-conclusion');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.boundingClientRect.top > 0) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.3,
+    rootMargin: '0px 0px -100px 0px'
+  });
+
+  setTimeout(() => {
+    elements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top > window.innerHeight) {
+        observer.observe(el);
+      } else if (rect.top > 100) {
+        observer.observe(el);
+      } else {
+        el.classList.add('visible');
+      }
+    });
+  }, 100);
+});
+</script>

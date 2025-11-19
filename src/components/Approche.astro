@@ -1,0 +1,105 @@
+---
+const approches = [
+  {
+    icon: `<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>`,
+    title: "Clarté",
+    text: "Tout est compris, expliqué et transparent. Vous savez ce qu'on construit, pourquoi, et comment."
+  },
+  {
+    icon: `<path d="M12 20V10M18 20V4M6 20v-4"/>`,
+    title: "Simplicité",
+    text: "Pas de jargon, pas de détours. On s'exprime simplement et on va droit au but."
+  },
+  {
+    icon: `<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/>`,
+    title: "Autonomie",
+    text: "Vous avez accès à tout. Le fonctionnement, les explications, la formation si vous en avez besoin."
+  },
+  {
+    icon: `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
+    title: "Délais tenus",
+    text: "Un projet avance au rythme annoncé. On tient nos engagements, point."
+  }
+];
+---
+
+<section class="approche" aria-label="Notre approche">
+  <div class="container">
+    <header class="header-approche">
+      <h2>Notre approche</h2>
+      <p>Une méthode de travail qui nous ressemble : directe, transparente, et pensée pour vous faciliter la vie.</p>
+    </header>
+
+    <div class="cards-grid">
+      {approches.map((item, index) => (
+        <div class="card-approche glass" style={`--delay: ${index * 100}ms`}>
+          <div class="card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <Fragment set:html={item.icon} />
+            </svg>
+          </div>
+          <div class="card-text">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+.approche{position:relative;padding:100px 0;overflow:hidden}
+.container{max-width:1100px;margin:0 auto;padding:0 32px}
+.header-approche{text-align:center;margin-bottom:60px;opacity:0;transform:translateY(40px)}
+.header-approche.visible{animation:fadeUp 800ms cubic-bezier(.16,1,.3,1) forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.header-approche h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-family:Montserrat,sans-serif;font-weight:900;margin:0 0 16px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;padding-bottom:4px}
+.header-approche p{font-size:1.1rem;color:var(--kano-light);opacity:.8;line-height:1.6;margin:0;max-width:600px;margin-left:auto;margin-right:auto}
+.cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card-approche{padding:28px 24px;border-radius:16px;opacity:0;transform:translateY(30px);transition:all .3s cubic-bezier(.34,.46,.35,1)}
+.card-approche.visible{animation:cardIn 800ms cubic-bezier(.16,1,.3,1) var(--delay) forwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.glass{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.card-approche:hover{transform:translateY(-6px);background:rgba(255,255,255,.06);border-color:rgba(212,175,55,.2);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.card-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(212,175,55,.05));border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;color:var(--kano-gold);margin-bottom:16px;transition:all .3s cubic-bezier(.34,.46,.35,1)}
+.card-icon svg{transition:transform .3s cubic-bezier(.34,.46,.35,1)}
+.card-approche:hover .card-icon{background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(212,175,55,.1));border-color:rgba(212,175,55,.4);box-shadow:0 8px 24px rgba(212,175,55,.2)}
+.card-approche:hover .card-icon svg{transform:scale(1.15) rotate(8deg)}
+.card-text h3{font-size:1.1rem;font-family:Montserrat,sans-serif;font-weight:800;color:#fff;margin:0 0 8px}
+.card-text p{font-size:.9rem;color:var(--kano-light);opacity:.8;line-height:1.6;margin:0}
+@media (max-width:1024px){.cards-grid{grid-template-columns:repeat(2,1fr);gap:16px}}
+@media (max-width:768px){.approche{padding:80px 0}.container{padding:0 20px}.header-approche{margin-bottom:48px}}
+@media (max-width:480px){.approche{padding:60px 0}.cards-grid{grid-template-columns:1fr;gap:16px}.card-approche{padding:24px 20px}}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const elements = document.querySelectorAll('.header-approche, .card-approche');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.boundingClientRect.top > 0) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.3,
+    rootMargin: '0px 0px -100px 0px'
+  });
+
+  setTimeout(() => {
+    elements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top > window.innerHeight) {
+        observer.observe(el);
+      } else if (rect.top > 100) {
+        observer.observe(el);
+      } else {
+        el.classList.add('visible');
+      }
+    });
+  }, 100);
+});
+</script>
