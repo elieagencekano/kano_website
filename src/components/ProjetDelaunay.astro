@@ -3,19 +3,21 @@ const projet = {
   titre: "Domaine DELAUNAY",
   sousTitre: "Viticulteur en Anjou",
   
-  imageFront: "grappe-de-raisin-domaine-DELAUNAY-scaled.webp",
-  imageBack: "mockupdelaunay.webp",
+  imageFront: "delaunaycardsection.jpg",
+  videoBack: "delaunaymockupmackbook.mp4",
   altFront: "Domaine Delaunay - Grappe de raisin",
   altBack: "Domaine Delaunay - Mockup",
   
   smallCards: [
     {
-      image: "degustation-vin-blanc-anjou-didier-delaunay (1).webp",
-      alt: "Domaine Delaunay - Vin blanc"
+      type: "video",
+      src: "delaunaymockupiphone.mp4",
+      alt: "Domaine Delaunay - Mockup vidéo"
     },
     {
-      image: "degustation-vin-anjou-didier-delaunay (1).webp",
-      alt: "Domaine Delaunay - Dégustation"
+      type: "video",
+      src: "delaunaymockupiphone2.mp4",
+      alt: "Domaine Delaunay - Mockup vidéo 2"
     }
   ],
   
@@ -42,15 +44,31 @@ const projet = {
             </div>
           </div>
           <div class="card-back">
-            <img src={`${import.meta.env.BASE_URL}${projet.imageBack}`} alt={projet.altBack} />
+            <video 
+              id="video-back" 
+              src={`${import.meta.env.BASE_URL}${projet.videoBack}`} 
+              muted 
+              playsinline
+              preload="auto"
+            ></video>
           </div>
         </div>
       </div>
       
       <div class="small-cards">
-        {projet.smallCards.map((card) => (
+        {projet.smallCards.map((card, index) => (
           <div class="small-card">
-            <img src={`${import.meta.env.BASE_URL}${card.image}`} alt={card.alt} />
+            {card.type === "video" ? (
+              <video 
+                id={`video-small-${index}`}
+                src={`${import.meta.env.BASE_URL}${card.src}`} 
+                muted 
+                playsinline
+                preload="auto"
+              ></video>
+            ) : (
+              <img src={`${import.meta.env.BASE_URL}${card.src}`} alt={card.alt} />
+            )}
           </div>
         ))}
       </div>
@@ -72,15 +90,15 @@ const projet = {
 .main-card{width:100%;aspect-ratio:16/10;position:relative;transform-style:preserve-3d}
 .card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform}
 .card-front,.card-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.card-front img,.card-back img{width:100%;height:100%;object-fit:cover;object-position:center}
+.card-front img,.card-back img,.card-back video{width:100%;height:100%;object-fit:cover;object-position:center}
 .card-back{transform:rotateY(180deg)}
-.card-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.66)}
+.card-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55)}
 .card-titles{display:flex;flex-direction:column;align-items:center;gap:12px}
 .card-subtitle{font-family:Montserrat,sans-serif;font-size:clamp(.75rem,1.5vw,1rem);font-weight:500;color:var(--kano-gold);text-transform:uppercase;letter-spacing:3px}
 .card-overlay h2{font-family:Montserrat,sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:#fff;text-align:center;margin:0;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .small-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;opacity:0;transform:translateY(-200px);z-index:-1;position:relative;will-change:transform,opacity;transition:none}
 .small-card{border-radius:16px;overflow:hidden;box-shadow:0 15px 40px rgba(0,0,0,.3);aspect-ratio:4/3}
-.small-card img{width:100%;height:100%;object-fit:cover;object-position:center}
+.small-card img,.small-card video{width:100%;height:100%;object-fit:cover;object-position:center}
 .main-card.flipped .card-inner{transform:rotateY(180deg)}
 .small-cards.revealed{opacity:1;transform:translateY(0)}
 .project-description{margin-top:30px;padding:20px 0;opacity:0;transform:translateY(30px);will-change:transform,opacity}
@@ -89,7 +107,7 @@ const projet = {
 .project-description p:last-child{margin-bottom:0}
 
 @media (max-width:768px){
-  .projet-delaunay{padding:40px 0;min-height:220vh}
+  .projet-delaunay{padding:40px 0;min-height:160vh}
   .container{padding:0 20px;top:80px}
   .small-cards{gap:12px;margin-top:12px}
   .card-overlay h2{font-size:1.5rem}
@@ -112,6 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const cardInner = section ? section.querySelector('.card-inner') : null;
   const smallCards = section ? section.querySelector('.small-cards') : null;
   const projectDescription = section ? section.querySelector('.project-description') : null;
+  const videoBack = document.getElementById('video-back');
+  const videoSmall = document.getElementById('video-small-0');
+  const videoSmall2 = document.getElementById('video-small-1');
 
   if (!section || !cardInner || !smallCards) return;
 
@@ -119,6 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let viewportWidth = window.innerWidth;
   let isMobile = viewportWidth <= 1024;
   let sectionOffsetTop = section.offsetTop;
+
+  let videoBackPlayed = false;
+  let videoSmallPlayed = false;
+  let videoSmall2Played = false;
+  let lastScrollY = window.scrollY || window.pageYOffset || 0;
+  let scrollDirection = 'down';
 
   const onResize = () => {
     viewportHeight = window.innerHeight;
@@ -134,6 +161,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const easeInOutCubic = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const clamp01 = v => Math.max(0, Math.min(1, v));
+
+  const reverseVideo = (video) => {
+    if (!video || video.currentTime <= 0) return;
+    const reverseStep = () => {
+      if (scrollDirection === 'up' && video.currentTime > 0) {
+        video.currentTime = Math.max(0, video.currentTime - 0.05);
+        requestAnimationFrame(reverseStep);
+      }
+    };
+    requestAnimationFrame(reverseStep);
+  };
 
   const updateWithScroll = () => {
     const sectionTop = sectionOffsetTop - virtualScroll;
@@ -159,6 +197,21 @@ document.addEventListener('DOMContentLoaded', () => {
       if (projectDescription) {
         projectDescription.style.opacity = '0';
         projectDescription.style.transform = 'translateY(30px)';
+      }
+      videoBackPlayed = false;
+      videoSmallPlayed = false;
+      videoSmall2Played = false;
+      if (videoBack) {
+        videoBack.currentTime = 0;
+        videoBack.pause();
+      }
+      if (videoSmall) {
+        videoSmall.currentTime = 0;
+        videoSmall.pause();
+      }
+      if (videoSmall2) {
+        videoSmall2.currentTime = 0;
+        videoSmall2.pause();
       }
       return;
     }
@@ -188,8 +241,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const flipAngle = flipProgress * 180;
     cardInner.style.transform = `rotateY(${flipAngle}deg)`;
 
-    const cardsStart   = scrollRange * 0.4;
-    const cardsEnd     = scrollRange * 1.2;
+    if (videoBack && flipAngle >= 90 && !videoBackPlayed && scrollDirection === 'down') {
+      videoBackPlayed = true;
+      videoBack.play();
+    }
+
+    if (videoBack && flipAngle < 90 && videoBackPlayed && scrollDirection === 'up') {
+      videoBackPlayed = false;
+      videoBack.pause();
+      reverseVideo(videoBack);
+    }
+
+    const cardsStart   = scrollRange * 0.25;
+    const cardsEnd     = scrollRange * 0.8;
     const cardsRaw     = (scrolledAmount - cardsStart) / (cardsEnd - cardsStart);
     const cardsClamped = clamp01(cardsRaw);
     const easedCards   = easeInOutCubic(cardsClamped);
@@ -198,9 +262,31 @@ document.addEventListener('DOMContentLoaded', () => {
     smallCards.style.opacity = String(cardsOpacity);
     smallCards.style.transform = `translateY(-${cardsY}px)`;
 
+    if (videoSmall && easedCards >= 0.6 && !videoSmallPlayed && scrollDirection === 'down') {
+      videoSmallPlayed = true;
+      videoSmall.play();
+    }
+
+    if (videoSmall && easedCards < 0.3 && videoSmallPlayed && scrollDirection === 'up') {
+      videoSmallPlayed = false;
+      videoSmall.pause();
+      reverseVideo(videoSmall);
+    }
+
+    if (videoSmall2 && easedCards >= 0.6 && !videoSmall2Played && scrollDirection === 'down') {
+      videoSmall2Played = true;
+      videoSmall2.play();
+    }
+
+    if (videoSmall2 && easedCards < 0.3 && videoSmall2Played && scrollDirection === 'up') {
+      videoSmall2Played = false;
+      videoSmall2.pause();
+      reverseVideo(videoSmall2);
+    }
+
     if (projectDescription) {
-      const descStart = scrollRange * 0.7;
-      const descEnd = scrollRange * 1.3;
+      const descStart = scrollRange * 0.5;
+      const descEnd = scrollRange * 0.95;
       const descRaw = (scrolledAmount - descStart) / (descEnd - descStart);
       const descClamped = clamp01(descRaw);
       const easedDesc = easeInOutCubic(descClamped);
@@ -210,14 +296,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const animate = () => {
-    const factor = isMobile ? 0.12 : 0.18;
+    const factor = isMobile ? 0.12 : 0.025;
     virtualScroll += (targetScroll - virtualScroll) * factor;
     updateWithScroll();
     requestAnimationFrame(animate);
   };
 
   window.addEventListener('scroll', () => {
-    targetScroll = window.scrollY || window.pageYOffset || 0;
+    const currentScroll = window.scrollY || window.pageYOffset || 0;
+    scrollDirection = currentScroll > lastScrollY ? 'down' : 'up';
+    lastScrollY = currentScroll;
+    targetScroll = currentScroll;
   }, { passive: true });
 
   cardInner.style.transition = 'none';
