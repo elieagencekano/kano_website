@@ -1,40 +1,40 @@
 ---
 const projet = {
-  titre: "Domaine DELAUNAY",
-  sousTitre: "Viticulteur en Anjou",
+  titre: "ACTIBA Menuiseries",
+  sousTitre: "Menuiserie à Montaigu Vendée",
   
-  imageFront: "delaunaycardsection.jpg",
-  videoBack: "delaunaymockupmackbook.mp4",
-  altFront: "Domaine Delaunay - Grappe de raisin",
-  altBack: "Domaine Delaunay - Mockup",
+  imageFront: "actibamenuiseriescard.webp",
+  videoBack: "actibamockupmacbook.mp4",
+  altFront: "Actiba Menuiseries - Carte",
+  altBack: "Actiba Menuiseries - Mockup",
   
   smallCards: [
     {
       type: "video",
-      src: "delaunaymockupiphone.mp4",
-      alt: "Domaine Delaunay - Mockup vidéo"
+      src: "actibamockupipad.mp4",
+      alt: "Actiba Menuiseries - Mockup iPad"
     },
     {
       type: "video",
-      src: "delaunaymockupiphone2.mp4",
-      alt: "Domaine Delaunay - Mockup vidéo 2"
+      src: "actibamockupiphone.mp4",
+      alt: "Actiba Menuiseries - Mockup iPhone"
     }
   ],
   
-  descriptionTitre: "Un site qui freinait les ventes",
+  descriptionTitre: "Un site invisible sur Google",
   descriptionParagraphes: [
-    "Un site <strong>non responsive</strong> fait fuir les visiteurs mobiles. Le Domaine Didier Delaunay souffrait d'une navigation confuse et de <strong>visuels dépassés</strong> qui ne reflétaient plus l'excellence de ses vins. Résultat : des visiteurs qui partent avant même de découvrir les cuvées, et des opportunités de vente manquées."
+    "Un site <strong>mal référencé</strong> passe inaperçu face à la concurrence. ACTIBA Menuiseries disposait d'un site <strong>non optimisé</strong> qui ne générait pas de demandes de devis. Sans mise en valeur de leurs réalisations, les prospects ne pouvaient pas se projeter et allaient voir ailleurs."
   ],
-  descriptionTitre2: "Une vitrine qui convertit",
+  descriptionTitre2: "Un site conçu pour convertir",
   descriptionParagraphes2: [
-    "Nous avons créé un <strong>site moderne et responsive</strong> qui transforme les visiteurs en clients. Chaque cuvée dispose d'une <strong>fiche détaillée</strong> avec arômes, terroir et accords mets-vins pour guider le choix. L'<strong>histoire du domaine</strong> met en avant le savoir-faire familial et crée un lien émotionnel avec les visiteurs. Le <strong>formulaire de réservation</strong> simplifié facilite les demandes de dégustation au caveau."
+    "Nous avons créé un <strong>site optimisé pour la prise de contact</strong> qui guide chaque visiteur vers la demande de devis. Une <strong>galerie avant/après</strong> met en scène leurs réalisations pour que les prospects se projettent dans leur propre projet. Le <strong>formulaire de devis</strong> est accessible à chaque étape du parcours. Le <strong>référencement local</strong> positionne ACTIBA sur les recherches menuiserie à Montaigu et ses environs."
   ],
-  lienSite: "https://didier-delaunay.fr",
-  lienTexte: "Découvrir le site du Domaine Delaunay"
+  lienSite: "https://actiba-menuiseries.fr",
+  lienTexte: "Découvrir le site d'ACTIBA Menuiseries"
 };
 ---
 
-<section class="projet-delaunay" aria-label="Projet Domaine Delaunay">
+<section class="projet-actiba" aria-label="Projet Actiba Menuiseries">
   <div class="container">
     <div class="cards-wrapper">
       <div class="main-card">
@@ -50,21 +50,12 @@ const projet = {
           </div>
           <div class="card-back">
             <video 
-              id="video-back" 
+              id="video-back-actiba" 
               src={`${import.meta.env.BASE_URL}${projet.videoBack}`} 
               muted 
               playsinline
               preload="auto"
             ></video>
-          </div>
-        </div>
-        
-        <div class="scroll-hint">
-          <span>Découvrir le projet</span>
-          <div class="scroll-hint-arrow">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 5v14M5 12l7 7 7-7"/>
-            </svg>
           </div>
         </div>
       </div>
@@ -74,7 +65,7 @@ const projet = {
           <div class="small-card">
             {card.type === "video" ? (
               <video 
-                id={`video-small-${index}`}
+                id={`video-small-actiba-${index}`}
                 src={`${import.meta.env.BASE_URL}${card.src}`} 
                 muted 
                 playsinline
@@ -112,10 +103,10 @@ const projet = {
 </section>
 
 <style>
-.projet-delaunay{position:relative;min-height:220vh;padding:60px 0}
+.projet-actiba{position:relative;min-height:220vh;padding:60px 0}
 .container{max-width:1000px;margin:0 auto;padding:0 32px;position:sticky;top:80px}
 .cards-wrapper{position:relative;perspective:1500px}
-.main-card{width:100%;aspect-ratio:16/10;position:relative;transform-style:preserve-3d;overflow:visible}
+.main-card{width:100%;aspect-ratio:16/10;position:relative;transform-style:preserve-3d}
 .card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform}
 .card-front,.card-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 .card-front img,.card-back img,.card-back video{width:100%;height:100%;object-fit:cover;object-position:center}
@@ -142,14 +133,10 @@ const projet = {
 .scroll-arrow:hover{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.4);transform:scale(1.08)}
 .scroll-arrow svg{transition:transform .3s cubic-bezier(.34,.46,.35,1)}
 .scroll-arrow:hover svg{transform:scale(1.15) rotate(8deg)}
-@keyframes float{0%,100%{transform:translateY(0) translateZ(100px)}50%{transform:translateY(10px) translateZ(100px)}}
-.scroll-hint{display:none;position:absolute;top:calc(100% + 60px);left:50%;transform:translateX(-50%) translateZ(100px);flex-direction:column;align-items:center;gap:16px;opacity:1;will-change:opacity;transition:opacity .3s ease;pointer-events:none;z-index:10}
-.scroll-hint span{font-size:1.1rem;color:var(--kano-light);opacity:.7;font-weight:500;letter-spacing:.5px}
-.scroll-hint-arrow{width:64px;height:64px;border-radius:50%;border:1px solid rgba(212,175,55,.25);background:rgba(212,175,55,.05);display:flex;align-items:center;justify-content:center;color:var(--kano-gold);animation:float 3s ease-in-out infinite}
-.scroll-hint-arrow svg{width:28px;height:28px}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
 
 @media (max-width:768px){
-  .projet-delaunay{padding:40px 0;min-height:200vh}
+  .projet-actiba{padding:40px 0;min-height:200vh}
   .container{padding:0 20px;top:80px}
   .small-cards{gap:12px;margin-top:12px}
   .small-card{aspect-ratio:3/4}
@@ -163,12 +150,9 @@ const projet = {
   .scroll-indicator{display:flex}
   .scroll-indicator span{font-size:.9rem}
   .scroll-arrow{width:48px;height:48px}
-  .scroll-hint{display:flex}
-  .scroll-hint-arrow{width:56px;height:56px}
 }
 @media (max-width:1024px){
   .scroll-indicator{display:flex}
-  .scroll-hint{display:flex}
 }
 @media (max-width:480px){
   .container{top:70px}
@@ -179,15 +163,14 @@ const projet = {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const section = document.querySelector('.projet-delaunay');
+  const section = document.querySelector('.projet-actiba');
   const cardInner = section ? section.querySelector('.card-inner') : null;
   const smallCards = section ? section.querySelector('.small-cards') : null;
   const projectDescription = section ? section.querySelector('.project-description') : null;
-  const videoBack = document.getElementById('video-back');
-  const videoSmall = document.getElementById('video-small-0');
-  const videoSmall2 = document.getElementById('video-small-1');
+  const videoBack = document.getElementById('video-back-actiba');
+  const videoSmall = document.getElementById('video-small-actiba-0');
+  const videoSmall2 = document.getElementById('video-small-actiba-1');
   const scrollIndicator = section ? section.querySelector('.scroll-indicator') : null;
-  const scrollHint = section ? section.querySelector('.scroll-hint') : null;
 
   if (!section || !cardInner || !smallCards) return;
 
@@ -357,12 +340,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const easedIndicator = easeInOutCubic(indicatorClamped);
       scrollIndicator.style.opacity = String(easedIndicator);
       scrollIndicator.style.transform = `translateY(${20 - easedIndicator * 20}px)`;
-    }
-
-    if (scrollHint) {
-      const hintFadeEnd = scrollRange * 0.1;
-      const hintProgress = clamp01(scrolledAmount / hintFadeEnd);
-      scrollHint.style.opacity = String(1 - hintProgress);
     }
   };
 

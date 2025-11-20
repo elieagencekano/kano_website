@@ -1,40 +1,40 @@
 ---
 const projet = {
-  titre: "Domaine DELAUNAY",
-  sousTitre: "Viticulteur en Anjou",
+  titre: "PRO2MAT",
+  sousTitre: "Matériel de levage près d'Angers",
   
-  imageFront: "delaunaycardsection.jpg",
-  videoBack: "delaunaymockupmackbook.mp4",
-  altFront: "Domaine Delaunay - Grappe de raisin",
-  altBack: "Domaine Delaunay - Mockup",
+  imageFront: "pro2matcard.webp",
+  videoBack: "pro2matmockupmacbook.mp4",
+  altFront: "Pro2Mat - Carte",
+  altBack: "Pro2Mat - Mockup",
   
   smallCards: [
     {
       type: "video",
-      src: "delaunaymockupiphone.mp4",
-      alt: "Domaine Delaunay - Mockup vidéo"
+      src: "pro2matmockupiphoneblog.mp4",
+      alt: "Pro2Mat - Mockup Blog"
     },
     {
       type: "video",
-      src: "delaunaymockupiphone2.mp4",
-      alt: "Domaine Delaunay - Mockup vidéo 2"
+      src: "pro2matmockupproductpage.mp4",
+      alt: "Pro2Mat - Mockup Page Produit"
     }
   ],
   
-  descriptionTitre: "Un site qui freinait les ventes",
+  descriptionTitre: "Un site qui perdait ses visiteurs",
   descriptionParagraphes: [
-    "Un site <strong>non responsive</strong> fait fuir les visiteurs mobiles. Le Domaine Didier Delaunay souffrait d'une navigation confuse et de <strong>visuels dépassés</strong> qui ne reflétaient plus l'excellence de ses vins. Résultat : des visiteurs qui partent avant même de découvrir les cuvées, et des opportunités de vente manquées."
+    "PRO2MAT disposait d'un site construit sur un <strong>template e-commerce inadapté</strong> à son activité. Résultat : des boutons \"Ajouter au panier\" sur des produits sans prix, une navigation confuse et des visiteurs qui repartaient sans comprendre comment contacter l'entreprise. Le site générait à peine <strong>4 demandes par mois</strong>."
   ],
-  descriptionTitre2: "Une vitrine qui convertit",
+  descriptionTitre2: "Une refonte pensée pour convertir",
   descriptionParagraphes2: [
-    "Nous avons créé un <strong>site moderne et responsive</strong> qui transforme les visiteurs en clients. Chaque cuvée dispose d'une <strong>fiche détaillée</strong> avec arômes, terroir et accords mets-vins pour guider le choix. L'<strong>histoire du domaine</strong> met en avant le savoir-faire familial et crée un lien émotionnel avec les visiteurs. Le <strong>formulaire de réservation</strong> simplifié facilite les demandes de dégustation au caveau."
+    "Nous avons entièrement repensé l'expérience utilisateur avec des <strong>pages produits optimisées</strong> qui guident vers la demande de devis ou d'essai. Chaque parcours mène naturellement vers le <strong>formulaire de contact</strong>. Un <strong>blog SEO</strong> avec des articles réguliers sur le levage renforce la visibilité. Résultat : PRO2MAT reçoit désormais <strong>4 à 5 demandes par semaine</strong>."
   ],
-  lienSite: "https://didier-delaunay.fr",
-  lienTexte: "Découvrir le site du Domaine Delaunay"
+  lienSite: "https://pro2mat.fr",
+  lienTexte: "Découvrir le site de PRO2MAT"
 };
 ---
 
-<section class="projet-delaunay" aria-label="Projet Domaine Delaunay">
+<section class="projet-pro2mat" aria-label="Projet Pro2Mat">
   <div class="container">
     <div class="cards-wrapper">
       <div class="main-card">
@@ -50,21 +50,12 @@ const projet = {
           </div>
           <div class="card-back">
             <video 
-              id="video-back" 
+              id="video-back-pro2mat" 
               src={`${import.meta.env.BASE_URL}${projet.videoBack}`} 
               muted 
               playsinline
               preload="auto"
             ></video>
-          </div>
-        </div>
-        
-        <div class="scroll-hint">
-          <span>Découvrir le projet</span>
-          <div class="scroll-hint-arrow">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 5v14M5 12l7 7 7-7"/>
-            </svg>
           </div>
         </div>
       </div>
@@ -74,7 +65,7 @@ const projet = {
           <div class="small-card">
             {card.type === "video" ? (
               <video 
-                id={`video-small-${index}`}
+                id={`video-small-pro2mat-${index}`}
                 src={`${import.meta.env.BASE_URL}${card.src}`} 
                 muted 
                 playsinline
@@ -97,22 +88,24 @@ const projet = {
           <p set:html={paragraphe}></p>
         ))}
         <a href={projet.lienSite} target="_blank" rel="noopener noreferrer" class="project-link">{projet.lienTexte}</a>
-        
-        <div class="scroll-indicator">
-          <span>Voir plus de réalisations</span>
-          <div class="scroll-arrow">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 5v14M5 12l7 7 7-7"/>
-            </svg>
-          </div>
-        </div>
+      </div>
+      
+      <div class="cta-section">
+        <h3>Votre site mérite mieux</h3>
+        <p>Vous aussi, vous perdez des clients à cause d'un site inadapté ? Discutons de votre projet et trouvons ensemble la solution pour transformer vos visiteurs en clients.</p>
+        <a href="/contact" class="cta-button">
+          <span>Discuter de mon projet</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-.projet-delaunay{position:relative;min-height:220vh;padding:60px 0}
+.projet-pro2mat{position:relative;min-height:220vh;padding:60px 0}
 .container{max-width:1000px;margin:0 auto;padding:0 32px;position:sticky;top:80px}
 .cards-wrapper{position:relative;perspective:1500px}
 .main-card{width:100%;aspect-ratio:16/10;position:relative;transform-style:preserve-3d;overflow:visible}
@@ -136,20 +129,14 @@ const projet = {
 .project-description p:last-of-type{margin-bottom:0}
 .project-link{display:inline-block;margin-top:20px;font-family:Montserrat,sans-serif;font-size:.9rem;font-weight:600;color:var(--kano-gold);text-decoration:none;transition:opacity .3s ease}
 .project-link:hover{opacity:.7}
-.scroll-indicator{display:none;flex-direction:column;align-items:center;gap:16px;margin-top:40px;opacity:0;transform:translateY(20px);will-change:transform,opacity}
-.scroll-indicator span{font-size:1rem;color:var(--kano-light);opacity:.6;font-weight:500;letter-spacing:.5px}
-.scroll-arrow{width:56px;height:56px;border-radius:50%;border:1px solid rgba(212,175,55,.25);background:rgba(212,175,55,.05);display:flex;align-items:center;justify-content:center;color:var(--kano-gold);animation:float 3s ease-in-out infinite;transition:all .3s cubic-bezier(.34,.46,.35,1)}
-.scroll-arrow:hover{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.4);transform:scale(1.08)}
-.scroll-arrow svg{transition:transform .3s cubic-bezier(.34,.46,.35,1)}
-.scroll-arrow:hover svg{transform:scale(1.15) rotate(8deg)}
-@keyframes float{0%,100%{transform:translateY(0) translateZ(100px)}50%{transform:translateY(10px) translateZ(100px)}}
-.scroll-hint{display:none;position:absolute;top:calc(100% + 60px);left:50%;transform:translateX(-50%) translateZ(100px);flex-direction:column;align-items:center;gap:16px;opacity:1;will-change:opacity;transition:opacity .3s ease;pointer-events:none;z-index:10}
-.scroll-hint span{font-size:1.1rem;color:var(--kano-light);opacity:.7;font-weight:500;letter-spacing:.5px}
-.scroll-hint-arrow{width:64px;height:64px;border-radius:50%;border:1px solid rgba(212,175,55,.25);background:rgba(212,175,55,.05);display:flex;align-items:center;justify-content:center;color:var(--kano-gold);animation:float 3s ease-in-out infinite}
-.scroll-hint-arrow svg{width:28px;height:28px}
+.cta-section{margin-top:40px;padding:40px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 20px 60px rgba(0,0,0,.4);border-radius:24px;text-align:center;opacity:0;transform:translateY(30px);will-change:transform,opacity}
+.cta-section h3{font-family:Montserrat,sans-serif;font-size:1.5rem;font-weight:800;color:#fff;margin:0 0 16px 0}
+.cta-section p{font-size:1rem;color:var(--kano-light);opacity:.88;line-height:1.6;margin:0 0 24px 0;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-button{display:inline-flex;align-items:center;gap:10px;padding:18px 36px;border-radius:999px;background:var(--kano-gold);color:var(--kano-ink);font-family:Montserrat,sans-serif;font-weight:700;font-size:1.08rem;text-decoration:none;transition:all .3s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 26px rgba(212,175,55,.3)}
+.cta-button:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(212,175,55,.45)}
 
 @media (max-width:768px){
-  .projet-delaunay{padding:40px 0;min-height:200vh}
+  .projet-pro2mat{padding:40px 0;min-height:200vh}
   .container{padding:0 20px;top:80px}
   .small-cards{gap:12px;margin-top:12px}
   .small-card{aspect-ratio:3/4}
@@ -160,15 +147,10 @@ const projet = {
   .project-description{margin-top:20px;padding:15px 0}
   .project-description h3{font-size:1.1rem;margin-bottom:12px}
   .project-description p{font-size:.85rem}
-  .scroll-indicator{display:flex}
-  .scroll-indicator span{font-size:.9rem}
-  .scroll-arrow{width:48px;height:48px}
-  .scroll-hint{display:flex}
-  .scroll-hint-arrow{width:56px;height:56px}
-}
-@media (max-width:1024px){
-  .scroll-indicator{display:flex}
-  .scroll-hint{display:flex}
+  .cta-section{margin-top:30px;padding:28px 20px}
+  .cta-section h3{font-size:1.3rem}
+  .cta-section p{font-size:.9rem}
+  .cta-button{padding:16px 28px;font-size:1rem}
 }
 @media (max-width:480px){
   .container{top:70px}
@@ -179,15 +161,14 @@ const projet = {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const section = document.querySelector('.projet-delaunay');
+  const section = document.querySelector('.projet-pro2mat');
   const cardInner = section ? section.querySelector('.card-inner') : null;
   const smallCards = section ? section.querySelector('.small-cards') : null;
   const projectDescription = section ? section.querySelector('.project-description') : null;
-  const videoBack = document.getElementById('video-back');
-  const videoSmall = document.getElementById('video-small-0');
-  const videoSmall2 = document.getElementById('video-small-1');
-  const scrollIndicator = section ? section.querySelector('.scroll-indicator') : null;
-  const scrollHint = section ? section.querySelector('.scroll-hint') : null;
+  const videoBack = document.getElementById('video-back-pro2mat');
+  const videoSmall = document.getElementById('video-small-pro2mat-0');
+  const videoSmall2 = document.getElementById('video-small-pro2mat-1');
+  const ctaSection = section ? section.querySelector('.cta-section') : null;
 
   if (!section || !cardInner || !smallCards) return;
 
@@ -239,6 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
         projectDescription.style.opacity = '0';
         projectDescription.style.transform = 'translateY(30px)';
       }
+      if (ctaSection) {
+        ctaSection.style.opacity = '0';
+        ctaSection.style.transform = 'translateY(30px)';
+      }
       return;
     }
 
@@ -252,6 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (projectDescription) {
         projectDescription.style.opacity = '0';
         projectDescription.style.transform = 'translateY(30px)';
+      }
+      if (ctaSection) {
+        ctaSection.style.opacity = '0';
+        ctaSection.style.transform = 'translateY(30px)';
       }
       videoBackPlayed = false;
       videoSmallPlayed = false;
@@ -349,20 +338,14 @@ document.addEventListener('DOMContentLoaded', () => {
       projectDescription.style.transform = `translateY(${30 - easedDesc * 30}px)`;
     }
 
-    if (scrollIndicator) {
-      const indicatorStart = scrollRange * 0.75;
-      const indicatorEnd = scrollRange * 1.1;
-      const indicatorRaw = (scrolledAmount - indicatorStart) / (indicatorEnd - indicatorStart);
-      const indicatorClamped = clamp01(indicatorRaw);
-      const easedIndicator = easeInOutCubic(indicatorClamped);
-      scrollIndicator.style.opacity = String(easedIndicator);
-      scrollIndicator.style.transform = `translateY(${20 - easedIndicator * 20}px)`;
-    }
-
-    if (scrollHint) {
-      const hintFadeEnd = scrollRange * 0.1;
-      const hintProgress = clamp01(scrolledAmount / hintFadeEnd);
-      scrollHint.style.opacity = String(1 - hintProgress);
+    if (ctaSection) {
+      const ctaStart = scrollRange * 0.85;
+      const ctaEnd = scrollRange * 1.15;
+      const ctaRaw = (scrolledAmount - ctaStart) / (ctaEnd - ctaStart);
+      const ctaClamped = clamp01(ctaRaw);
+      const easedCta = easeInOutCubic(ctaClamped);
+      ctaSection.style.opacity = String(easedCta);
+      ctaSection.style.transform = `translateY(${30 - easedCta * 30}px)`;
     }
   };
 
@@ -383,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
   cardInner.style.transition = 'none';
   smallCards.style.transition = 'none';
   if (projectDescription) projectDescription.style.transition = 'none';
+  if (ctaSection) ctaSection.style.transition = 'none';
 
   requestAnimationFrame(animate);
 });
