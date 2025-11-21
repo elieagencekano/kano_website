@@ -1,0 +1,137 @@
+<div id="cookie-banner" class="cookie-banner hidden">
+    <div class="cookie-box glass">
+      <p class="cookie-text">
+        Nous utilisons des cookies pour garantir le bon fonctionnement du site et pour analyser notre audience.
+      </p>
+  
+      <div class="actions">
+        <button id="cookie-accept" class="btn accept">Accepter</button>
+        <button id="cookie-refuse" class="btn refuse">Refuser</button>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+  .cookie-banner{
+    position:fixed;
+    bottom:32px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:9999;
+    pointer-events:none;
+    opacity:0;
+    transition:.35s ease;
+  }
+  
+  .cookie-banner:not(.hidden){
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+  
+  .cookie-banner.hidden{
+    opacity:0;
+    transform:translateX(-50%) translateY(10px);
+  }
+  
+  .cookie-box{
+    min-width:340px;
+    max-width:460px;
+    padding:18px 22px;
+    border-radius:18px;
+    pointer-events:auto;
+
+    background:rgba(15,20,30,.55); 
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+    border:1px solid rgba(255,255,255,.18);
+  
+    box-shadow:
+      0 16px 40px rgba(0,0,0,.55),
+      0 0 0 1px rgba(255,255,255,.05) inset;
+  
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  
+  .cookie-text{
+    margin:0;
+    padding:0;
+    font-size:.92rem;
+    color:var(--kano-light);
+    line-height:1.45;
+    opacity:.92;
+  }
+  
+  .actions{
+    display:flex;
+    gap:10px;
+    width:100%;
+  }
+  
+  .btn{
+    flex:1;
+    padding:10px 0;
+    border-radius:999px;
+    font-family:Montserrat,sans-serif;
+    font-weight:700;
+    font-size:.9rem;
+    text-align:center;
+    cursor:pointer;
+    border:none;
+    transition:.25s ease;
+  }
+  
+  .accept{
+    background:var(--kano-gold);
+    color:var(--kano-ink);
+  }
+  
+  .refuse{
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.18);
+    color:var(--kano-light);
+  }
+  .refuse:hover{
+    background:rgba(255,255,255,.14);
+    border-color:rgba(212,175,55,.25);
+    color:var(--kano-gold);
+  }
+  
+  @media(max-width:480px){
+    .cookie-box{
+      bottom:20px;
+      padding:16px 18px;
+    }
+    .cookie-text{
+      font-size:.9rem;
+    }
+    .btn{
+      padding:10px 0;
+      font-size:.88rem;
+    }
+  }
+  </style>
+  
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const banner = document.getElementById("cookie-banner");
+    const accept = document.getElementById("cookie-accept");
+    const refuse = document.getElementById("cookie-refuse");
+  
+    const state = localStorage.getItem("kano_cookie_consent");
+  
+    if (!state) banner.classList.remove("hidden");
+  
+    accept.onclick = () => {
+      localStorage.setItem("kano_cookie_consent","accepted");
+      banner.classList.add("hidden");
+      location.reload();
+    };
+  
+    refuse.onclick = () => {
+      localStorage.setItem("kano_cookie_consent","refused");
+      banner.classList.add("hidden");
+    };
+  });
+  </script>  
