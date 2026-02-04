@@ -3,13 +3,13 @@ const currentYear = new Date().getFullYear();
 
 const links = {
   main: [
-    { label: "Nos solutions", href: "/nos-solutions" },
-    { label: "Notre ADN", href: "/notre-adn" },
+    { label: "ADN", href: "/adn" },
+    { label: "Réalisations", href: "/realisations" },
     { label: "Contact", href: "/contact" }
   ],
   legal: [
-    { label: "Mentions légales", href: "#mentions" },
-    { label: "Politique de confidentialité", href: "#privacy" }
+    { label: "Mentions légales", href: "/mentions-legales" },
+    { label: "Politique de confidentialité", href: "/politique-de-confidentialite" }
   ]
 };
 
@@ -22,7 +22,7 @@ const social = [
   <div class="footer-content">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src={`${import.meta.env.BASE_URL}logo-kano.svg`} alt="KANO" class="brand-logo" />
+        <img src="/logo-kano.svg" alt="KANO" class="brand-logo" />
         <p class="brand-tagline">Votre partenaire digital à Angers</p>
         <p class="brand-desc">Nous créons des sites qui attirent, convainquent et transforment.</p>
         <div class="social-links">
