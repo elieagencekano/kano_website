@@ -1,0 +1,102 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const title = "Politique de confidentialité — KANO";
+const description = "Découvrez comment l'agence KANO gère et protège vos données personnelles (RGPD). Notre engagement pour votre confidentialité.";
+---
+
+<Layout title={title} description={description}>
+  <section class="legal-page">
+    <div class="container-legal">
+      <h1>Politique de confidentialité</h1>
+
+      <p>
+        Cette politique explique comment la SAS KANO collecte, utilise et protège vos données,
+        conformément au RGPD et à la législation française.
+      </p>
+
+      <h2>Données collectées</h2>
+      <p>
+        Nous collectons uniquement les données strictement nécessaires :
+      </p>
+      <ul>
+        <li>Informations envoyées via le formulaire de contact (nom, email, message).</li>
+        <li>Données de navigation anonymisées via Google Analytics.</li>
+      </ul>
+
+      <h2>Formulaire de contact</h2>
+      <p>
+        Lorsque vous envoyez un message via notre formulaire, vos données sont transmises à :
+      </p>
+      <p>
+        <strong>contact@consultingkano.fr</strong>  
+        via le service Formcarry (traitement sécurisé des formulaires).
+      </p>
+
+      <h2>Analytics (Google Analytics)</h2>
+      <p>
+        Nous utilisons Google Analytics pour analyser le trafic du site.
+        Les données collectées sont anonymisées et ne permettent pas de vous identifier.
+      </p>
+      <p>
+        Vous pouvez refuser ces cookies via notre bandeau de consentement.
+      </p>
+
+      <h2>Responsable des données personnelles</h2>
+      <p>
+        Le responsable du traitement est : <strong>SAS KANO</strong>  
+        25 rue Lenepveu, 49100 Angers  
+        Email : contact@consultingkano.fr
+      </p>
+
+      <h2>Vos droits</h2>
+      <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+      <ul>
+        <li>Droit d’accès</li>
+        <li>Droit de rectification</li>
+        <li>Droit de suppression (droit à l’oubli)</li>
+        <li>Droit de limitation du traitement</li>
+        <li>Droit d’opposition</li>
+      </ul>
+
+      <p>
+        Pour exercer vos droits :  
+        <strong>contact@consultingkano.fr</strong>
+      </p>
+
+      <h2>Durée de conservation</h2>
+      <p>
+        Les messages envoyés via le formulaire sont conservés le temps de traiter la demande.
+        Les données analytics sont conservées 14 mois maximum.
+      </p>
+
+      <h2>Modifications</h2>
+      <p>
+        Cette politique peut être mise à jour à tout moment. Dernière mise à jour : {new Date().getFullYear()}.
+      </p>
+    </div>
+  </section>
+
+  <style>
+    .legal-page { padding: 120px 0; }
+    .container-legal {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 32px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--kano-light);
+    }
+    h1, h2 {
+      font-family: Montserrat, sans-serif;
+      color: #fff;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 40px; }
+    h2 { margin-top: 40px; margin-bottom: 12px; font-size: 1.4rem; }
+    ul { padding-left: 20px; opacity: .85; }
+    p { opacity: .85; }
+    @media(max-width:768px){
+      .container-legal{ padding: 0 20px; }
+    }
+  </style>
+</Layout>

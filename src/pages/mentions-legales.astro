@@ -1,0 +1,72 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const title = "Mentions légales — KANO";
+const description = "Informations légales complètes concernant KANO, agence web & marketing située à Angers. Consultez nos mentions légales.";
+---
+
+<Layout title={title} description={description}>
+  <section class="legal-page">
+    <div class="container-legal">
+      <h1>Mentions légales</h1>
+
+      <h2>Éditeur du site</h2>
+      <p>
+        <strong>SAS KANO</strong><br />
+        25 rue Lenepveu, 49100 Angers, France<br />
+        SIRET : 94124147300011<br />
+        Président : Elie Lhommeau<br />
+        Directeur Général : Arthur Damas<br />
+        Responsable de la publication : Les co-dirigeants
+      </p>
+
+      <h2>Hébergement</h2>
+      <p>
+        OVHcloud<br />
+        2 rue Kellermann, 59100 Roubaix, France<br />
+        Téléphone : +33 9 72 10 10 07
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Email : contact@consultingkano.fr<br />
+        Site : https://consultingkano.fr
+      </p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        Le contenu du site (textes, images, vidéos, graphismes, code, etc.)
+        est la propriété exclusive de la SAS KANO, sauf mention contraire.
+        Toute reproduction ou utilisation sans autorisation est interdite.
+      </p>
+
+      <h2>Limitations de responsabilité</h2>
+      <p>
+        KANO s'efforce de fournir un site fiable et régulièrement mis à jour, mais
+        ne peut garantir l'absence totale d’erreurs ou d’interruptions techniques.
+      </p>
+    </div>
+  </section>
+
+  <style>
+    .legal-page { padding: 120px 0; }
+    .container-legal {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 32px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--kano-light);
+    }
+    h1, h2 {
+      font-family: Montserrat, sans-serif;
+      color: #fff;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 40px; }
+    h2 { margin-top: 40px; margin-bottom: 12px; font-size: 1.4rem; }
+    p { opacity: .85; }
+    @media(max-width:768px){
+      .container-legal{ padding: 0 20px; }
+    }
+  </style>
+</Layout>
